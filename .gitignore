@@ -1,0 +1,22 @@
+# Object files
+obj/*
+*.o
+
+# Configure files
+*.d
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+bin/*
+*.exe
+*.out
+*.app

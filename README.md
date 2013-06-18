@@ -1,4 +1,4 @@
-MAC0211-EP3: Jogo das Canoas
+MAC0211-EP4: Jogo das Canoas
 ============================
 
 #### INFORMAÇÔES ####
@@ -7,7 +7,7 @@ MAC 0211 - Laboratório de Programação I
 IME-USP  - Primeiro  Semestre  de  2013   
 Turma 45 - Kelly Rosa Bragheto             
                                            
-Terceiro Exercício-Programa:                
+Quarto Exercício-Programa:                
 JOGO DAS CANOAS                            
                                            
 Karina Suemi Awoki              7572102    
@@ -15,7 +15,7 @@ Renato Cordeiro Ferreira        7990933
 Ruan de Menezes Costa           7990929    
                                            
 Em caso de eventuais problemas, acesse:       
-https://github.com/renatocf/MAC0211-EP3
+https://github.com/renatocf/MAC0211-EP4
 
 #### INSTALAÇÃO ####
 
