@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Canoagem
+Comment=Desvie sua canoa de obstáculos no rio!
+Exec=$(INSTBIN)/$(BIN)
+Icon=$(INSTICO)/$(ICON)
+Terminal=true
+Type=Application
+Categories=Games;ComputerScience;C;

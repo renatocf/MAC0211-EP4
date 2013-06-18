@@ -1,0 +1,375 @@
+\documentclass[a4paper,12pt]{article}
+
+% --------------------------------------------------------------------------- %
+\usepackage[utf8]{inputenc}             % Encodamento utf-8
+\usepackage[brazil]{babel}              % Parcote para texto em portuguÃªs
+
+\usepackage{setspace}                   % EspaÃ§amento flexÃ­vel
+\usepackage{indentfirst}                % IndentaÃ§Ã£o do primeiro parÃ¡grafo
+\usepackage[fixlanguage]{babelbib}      % OpÃ§Ãµes extras para linguagem
+
+\usepackage[usenames,svgnames,dvipsnames]{xcolor}
+\usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
+\usepackage[a4paper,top=2.54cm,bottom=2.0cm,left=2.0cm,right=2.54cm]{geometry}
+
+\usepackage[pdftex,plainpages=false,pdfpagelabels,pagebackref,colorlinks=true,
+            citecolor=DarkGreen,linkcolor=NavyBlue,urlcolor=DarkCornflowerBlue,
+            filecolor=green,bookmarksopen=true]{hyperref}   % links coloridos
+\usepackage[all]{hypcap}                % soluciona o problema com o hyperref 
+                                        % e capitulos
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{arabic} % começamos a numerar 
+\begin{document}
+
+
+\begin{center} 
+  {\Huge \textcolor{NavyBlue}{ \textbf{Documentação}}}
+\end{center}
+
+\bigskip
+\bigskip
+\bigskip
+
+
+
+\begin{center} 
+  {\Huge \textcolor{NavyBlue}{ \textbf{Jogo das canoas}}}
+\end{center}
+
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{\LARGE \textcolor{NavyBlue}{ \textbf{Índice:}}}
+\bigskip
+\bigskip
+\bigskip
+
+{\large \textcolor{CornflowerBlue}{\textbf{Bibliotecas (Arquivos .h)}}}
+\begin{verbatim}
+
+allegro.h . . . . . . . . . . . pág. 03
+getopt.h  . . . . . . . . . . . pág. 03
+statistical.h . . . . . . . . . pág. 03
+strip.h . . . . . . . . . . . . pág. 03
+terrain.h . . . . . . . . . . . pág. 03
+test.h. . . . . . . . . . . . . pág. 03
+utils.h . . . . . . . . . . . . pág. 03
+
+\end{verbatim}
+
+{\textcolor{NavyBlue}{ LIST: }}
+\begin{verbatim}
+list.h . . . . . . . . . . . pág. 04
+list-internal.h. . . . . . . pág. 04
+list-item.h. . . . . . . . . pág. 04
+
+\end{verbatim}
+
+{\textcolor{NavyBlue}{RIVER:}}
+\begin{verbatim}
+river.h . . . . . . . . . . pág. 04
+river-internal.h. . . . . . pág. 04
+
+
+
+
+
+\end{verbatim}
+
+{\large \textcolor{CornflowerBlue}{\textbf{Arquivos .c}}}
+\begin{verbatim}
+allegro.c . . . . . . . . . . . pág. 05
+getopt.c. . . . . . . . . . . . pág. 05
+list.c. . . . . . . . . . . . . pág. 06
+river . . . . . . . . . . . . . pág. 07
+statistical.c . . . . . . . . . pág. 07
+strip.c . . . . . . . . . . . . pág. 08
+test.c. . . . . . . . . . . . . pág. 08
+utils.c . . . . . . . . . . . . pág. 08
+
+\end{verbatim}
+
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  allegro.h}}
+\bigskip
+
+Cria as funções que são responsáveis pela imagem gerada em interface gráfica como as que
+desenham quadrados de água, de terra e a elipse que representa o barco. Além de chamar a
+biblioteca allegro e abrir e fechar a janela. 
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  getopt.h}}
+\bigskip
+
+Cria a função {\textcolor{CornflowerBlue}{char getopt(int argc, char **argv, char *optstring);}}
+que controla o menu de opções. Através dele, recebemos as opções que o usuário entra como parâmetro e 
+e a utilizamos. Também cria variáveis auxiliares à respectiva função.
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  statistical.h}}
+\bigskip
+
+Cria as funções estatísticas
+{\textcolor{CornflowerBlue}{void  stat\_set\_seed(int seed);}},  
+{\textcolor{CornflowerBlue}{float stat\_gen\_uniform\_float(float init, float end);}} e 
+{\textcolor{CornflowerBlue}{int stat\_gen\_uniform\_int(int init, int end);}} no módulo 
+{\textcolor{CornflowerBlue}{statistical.c}} que auxiliam na geração aleatória do rio e suas ilhas.
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  strip.h}}
+\bigskip
+
+Responsável pelas funções que manipulam as faixas de terra do terreno com as funções
+{\textcolor{CornflowerBlue}{void   tstrip\_seed(int);}}, 
+{\textcolor{CornflowerBlue}{void   tstrip\_free(TStrip);}}, 
+{\textcolor{CornflowerBlue}{void   tstrip\_print(TStrip);}}, 
+{\textcolor{CornflowerBlue}{void   tstrip\_island(float prob, int freq);}} e 
+{\textcolor{CornflowerBlue}{TStrip tstrip\_generate(int size, int zone, float normalization, TStrip base);}} que estão localizadas no módulo 
+{\textcolor{CornflowerBlue}{strip.c}}.
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  terrain.h}}
+\bigskip
+
+Responsável pelas funções que controlam a configuração do terreno como a velocidade e tipo, no caso terra ou água.
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  test.h}}
+\bigskip
+
+É responsável pelas funções que realizam os testes com velocidades, margens e fluxos de acordo com o número de frames/iterações que o usuário escolher.
+Serão passados os valores de acordo com o n-ésimo frame.
+
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  utils.h}}
+\bigskip
+
+Responsável pela função de alocação de memória de uma forma que o programa será finalizado caso haja erro de alocação.
+
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  LIST  list.h}}
+\bigskip
+
+Cria as funções de manipulação de listas ligadas circulares com cabeça duplamente encadeadas. Tais como remoção, inicialização, inserção, seleção, entre outros.
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  LIST  list-internal.h}}
+\bigskip
+
+É responsável pela configuração da struct que manipulamos em list.h
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  LIST  list-item.h}}
+\bigskip
+
+Define um vetor LItem(*LItem) como um terrain.
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  RIVER  river.h}}
+\bigskip
+
+Controla as funções que irão manipular a configuração do rio.
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  RIVER  river-internal.h}}
+\bigskip
+
+É responsável pela struct de configuração do rio, controlando o fluxo, altura, largura, zona, probabilidade e frequência.
+
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{\Large \textcolor{NavyBlue}{ \textbf{Arquivos .c  }}}{\large \textcolor{CornflowerBlue}{  allegro.c}}
+\bigskip
+
+Manipula as funções que são responsáveis pela imagem gerada na tela e pela criação e finalização da janela através
+das funções:
+
+{\textcolor{CornflowerBlue}{void gui\_init(void)}} Inicializa a biblioteca allegro. 
+
+{\textcolor{CornflowerBlue}{void gui\_window\_clear(void)}} Pinta a janela inteira com a cor preta (0, 0, 0).  
+
+{\textcolor{CornflowerBlue}{void gui\_window\_update(void)}} Carrega a janela, atualiza as configurações que foram feitas.
+ 
+{\textcolor{CornflowerBlue}{void gui\_window\_create(int length, int height)}} Cria uma janela de altura height e altura length. 
+
+{\textcolor{CornflowerBlue}{int gui\_window\_destroy(void)}} Fecha a janela e finaliza o programa quando o usuário clica em 'X'.
+
+{\textcolor{CornflowerBlue}{void gui\_river\_create\_land(float x1, float y1)}} Desenha quadrados na cor da terra nas 
+coordenas (x1, y1).
+
+{\textcolor{CornflowerBlue}{void gui\_river\_create\_water(float x1, float y1)}} Desenha quadrados na cor da água nas
+coordenadas (x1, y1). 
+
+{\textcolor{CornflowerBlue}{void gui\_river\_create\_margin(int x1, int y1, int x2, int y2, int x3, int y3)}} Desenha triangulos 
+nas cores de terra e água, formando a margem. Essa função faz triangulos com vértices de coordenas (x1, y1), (x2, y2) e (x3, y3) 
+em cor de terra, e como esses triangulos sempre serão metade de quadrados, desenhamos na outra metade do mesmo quadrado,
+ outro triangulo com cor de água.
+
+{\textcolor{CornflowerBlue}{void gui\_boat\_create(float x, float y)}} Desenha uma canoa em forma de elipse, com centro em (x, y).
+
+
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Arquivos .c  }}}{\large \textcolor{CornflowerBlue}{  getopt.c}}
+\bigskip
+
+Este módulo possui a função getopt recebe todos os parâmetros passados para o main pelo usuário, a quantidade de palavras recebidas(arg c) e também, um vetor de chars(optstring) que possui todas as opções de letras possíveis, sendo que este é apontado por um inteiro que controlará os valores já verificados... Como o L (de Largura), o H(de altura), entre outros. Essa função compara, a cada iteração, os valores recebidos pelo main e os valores de optstring... Caso seja encontrado um valor semelhante e ele tenha o "-" antes, esse char é devolvido pela função, ele é movido para o início pela função {\textcolor{CornflowerBlue}{move\_to\_init(char **argv, int initial\_pos);}} (função que se localiza neste mesmo módulo) e o inteiro que aponta para aoptstring passa a apontar para o primeiro valor ainda não verificado.
+
+\bigskip
+\bigskip
+\bigskip
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Arquivos .c  }}}{\large \textcolor{CornflowerBlue}{  list.c}}
+\bigskip
+
+Este módulo irá controlar as listas ligadas circulares com cabeça duplamente encadeadas de uma forma generalizada, permitindo que tipos diferentes de estruturas possam utilizar esse meio de manipulação de lista.
+Nele estão localizadas várias funções como...
+
+{\textcolor{CornflowerBlue}{List list\_init(int N)}} inicializa a lista, criando uma lista e uma cabeça para ela... E como é uma lista circular duplamente encadeada, atribuímos a cabeça como o próximo e o anterior dela mesma.
+
+{\textcolor{CornflowerBlue}{void list\_free(List list)}} libera a lista inteira, inclusive a cabeça. Essa função é de suma importância, pois desocupa os espaços que serão mais utilizados na memória.
+
+{\textcolor{CornflowerBlue}{int list\_empty(List list)}} retorna 1 caso a lista esteja vazia e 0 caso possua algum elemento.
+Observe que uma lista vazia é aquela que possui apenas a cabeça. 
+
+{\textcolor{CornflowerBlue}{LItem list\_remove(List list, Link node)}} irá remover uma determinada célula da lista e irá retornar o valor(item) que ela possuia.
+Quando essa célula é removido, a célula posterior passará a ser adjacente à anterior e a célula removida passará a ser excluída da memória usando free.
+
+{\textcolor{CornflowerBlue}{void list\_insert(List list, LItem item)}} adiciona uma célula à lista de forma que esta seja adicionada após a cabeça. Ou seja, cabeça->próximo = cálula. 
+
+{\textcolor{CornflowerBlue}{Link  list\_head(List list)}} devolve o endereço da cabeça da lista, passada como parâmetro.
+
+{\textcolor{CornflowerBlue}{Link  list\_next(Link node)}} devolve o endereço da célula seguinte à célula que foi passada como parâmetro.
+
+{\textcolor{CornflowerBlue}{Link  list\_prev(Link node)}} devolve o endereço da célula anterior à que foi passada como parâmetro.
+
+{\textcolor{CornflowerBlue}{LItem list\_item(Link node)}} retorna o item que está contido na célula que foi passada como parâmetro.
+
+{\textcolor{CornflowerBlue}{void list\_select(List list, int direction, void (*visit) (LItem))}} Percorrerá a lista de frente 
+para trás caso direction seja igual a HEAD, caso contrário, percorrerá a lista de trás para frente.
+
+{\textcolor{CornflowerBlue}{Link list\_new\_node(LItem item)}} cria uma nova célula preenchida por um item passado como parâmetro. Essa nova célula criada não se liga a nenhuma outra, é uma célula inicialmente isolada.
+
+\newpage  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{\Large \textcolor{NavyBlue}{ \textbf{Arquivos .c  }}}{\large \textcolor{CornflowerBlue}{  river.c}}
+\bigskip
+
+Esse módulo irá controlar as características do rio, como o fluxo, a velocidade de cada ponto, entre outros com as seguintes funções:
+
+{\textcolor{CornflowerBlue}{void river\_config\_flux(float flux)}} recebe como parâmetro um valor e o passa para o atribui ao fluxo do rio.
+
+{\textcolor{CornflowerBlue}{void river\_config\_island (float prob\_island, int freq\_island)}} atribui a probabilidade de surgimento de uma ilha e a distância mínima que ela deve estar de uma outra ilha ao rio, a partir dos parâmetros recebidos.
+
+{\textcolor{CornflowerBlue}{void river\_config\_size(int length, int height)}} atribui altura e largura ao rio a partir dos parâmetros recebidos. 
+
+{\textcolor{CornflowerBlue}{void river\_config\_margins(int zone)}} atribui uma zona de conforto ao rio que é a mínima distância que uma margem pode ter da outra, impedindo que o rio fique inavegável.
+
+{\textcolor{CornflowerBlue}{void river\_animation\_generate(int seed)}} é responsável por gerar o rio, ela irá chamar outras funções que atribuirão estatisticamente valores para iniciar o rio e que preencherão o rio com h linhas
+que contêm informações de ser água ou terra e velocidade. Sendo h a altura do rio atribuída pelo usuário.
+
+{\textcolor{CornflowerBlue}{void river\_animation\_iterate()}} é responsável pela imagem que o usuário verá na tela, pois pegará o valor da altura e juntamente com a função {\textcolor{CornflowerBlue}{void river\_animation\_generate(int seed)}}, gerará um frame do rio, juntando as h faixas de terreno do repectivo frame.
+
+{\textcolor{CornflowerBlue}{void strip\_print(TStrip strip)}} irá imprimir uma determinada linha do rio em interface gráfica 
+chamando as funções de allegro.h. Nessa função será verificado se determinado pixel é terra, água ou margem para assim poder
+usar a biblioteca allegro através de outas funções.
+
+{\textcolor{CornflowerBlue}{void river\_animation\_finish()}} é responsável por finalizar o rio, desalocando as células utilizadas por ele.
+
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Arquivos .c  }}}{\large \textcolor{CornflowerBlue}{  statistical.c}}
+\bigskip
+
+Esse módulo é responsável por gerar números aleatórios de acordo com determinadas distribuições que são determinadas pelas seguintes funções:
+
+{\textcolor{CornflowerBlue}{void stat\_set\_seed(int seed)}} inicializa a semente dos números randomicos.
+
+{\textcolor{CornflowerBlue}{float stat\_gen\_uniform\_float(float min, float max)}} gera números aleatórios do tipo float entre min e max de acordo com a distribuição uniforme.
+
+{\textcolor{CornflowerBlue}{int stat\_gen\_uniform\_int(int min, int max)}} gera números aletórios do tipo inteiros entre min e max (incluindo min e max) de acordo com a distribuição uniforme
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+{\Large \textcolor{NavyBlue}{ \textbf{Arquivos .c  }}}{\large \textcolor{CornflowerBlue}{  strip.c}}
+\bigskip
+
+Manipula as faixas de terra, que são as linhas da imagem, com as seguintes funções:
+
+{\textcolor{CornflowerBlue}{void   tstrip\_seed(int)}} irá inicializar a seed através de uma função no módulo estístico.
+
+{\textcolor{CornflowerBlue}{void tstrip\_island(float prob, int freq)}} irá atribuir valores recebidos por parâmetros, à variáveis internas de frequência e probabilidade de surgimento de ilha.
+
+{\textcolor{CornflowerBlue}{void tstrip\_free(TStrip strip)}} irá remover a faixa de terra utilizando a função de list.c, desse modo, esse espaço será desalocado da memória.
+
+{\textcolor{CornflowerBlue}{TStrip tstrip\_generate(int size, int zone, float normalization, TStrip base)}} gera uma faixa de terra. Se ela for a primeira linha, esta será gerada unicamente com funções estísticas, porém, se ela não for a primeira faixa, irá gerar a linha estatisticamente de acordo com a linha anterior... Também atribuirá velocidades aos pontos de acordo com funções estatísticas, sempre tomando como base a faixa de terra anterior. 
+
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Arquivos .c  }}}{\large \textcolor{CornflowerBlue}{  test.c}}
+\bigskip
+
+{\textcolor{CornflowerBlue}{void analyse\_program(int seed, int iterations)}} fará com que o programa gere um rio com n iterações para que na n-ésima iteração, possa-se retirar os valores para teste.
+
+{\textcolor{CornflowerBlue}{void analyse\_river(int seed)}} é responsável por imprimir na tela os resultados do teste de acordo com o n-ésimo frame. Imprime características como fluxo do rio, altura da tela, largura da tela, zona de conforto do rio, entre outras características que são passados pelo usuário via parâmetro.
+
+{\textcolor{CornflowerBlue}{static void analyse\_lines(TStrip strip)}} calcula e faz um relatório de determinada linha do rio, mostrando valores que não são passados pelo usuário, mas são gerados probabilisticamente, como a quantidade de água e terra, fluxo, e posição das margens em uma linha. 
+
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Arquivos .c  }}}{\large \textcolor{CornflowerBlue}{  utils.c}}
+\bigskip
+
+Aloca memória com tamanho size\_t de forma que, caso haja um erro de alocação o programa é finalizado.
+
+
+\end{document}

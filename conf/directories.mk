@@ -1,0 +1,9 @@
+# DIRECTORIES ##########################################################
+SRCDIR := src
+OBJDIR := obj
+BINDIR := bin
+LIBDIR := lib
+DOCDIR := man
+CONFDIR := conf
+TESTDIR := test
+HEADDIR := include
