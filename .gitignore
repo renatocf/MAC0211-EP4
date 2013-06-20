@@ -1,3 +1,7 @@
+# Source files
+src/*.tab.c
+src/*.yy.c
+
 # Object files
 obj/*
 *.o
