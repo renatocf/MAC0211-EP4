@@ -43,41 +43,41 @@ SEP        :
 {FLUXO}\s*{SEP}\s*{FLOAT} {
     
     sscanf(yytext, "%f", (float *) &yylval);
-    return FLUX;
+    return B_FLUX;
 }
 
 {ALTURA}\s*{SEP}\s*{INT} {
     
     sscanf(yytext, "%d", (int *) &yylval);
-    return HEIGHT;
+    return B_HEIGHT;
 }
 
 {LARGURA}\s*{SEP}\s*{INT} {
 
     sscanf(yytext, "%d", (int *) &yylval);
-    return HEIGHT;
+    return B_LENGTH;
 }
 
 {ZONA}\s*{SEP}\s*{INT} {
 
     sscanf(yytext, "%d", (int *) &yylval);
-    return HEIGHT;
+    return B_ZONE;
 }
 
 {ILHAS}\s*{SEP}\s*FLOAT {
 
     sscanf(yytext, "%f", (float *) &yylval);
-    return FLUX;
+    return B_ISLAND;
 }
 
 {SEMENTE}\s*{SEP}\s*{INT} {
 
     sscanf(yytext, "%d", (int *) &yylval);
-    return HEIGHT;
+    return B_SEED;
 }
 
 {FREQUENCIA}\s*{SEP}\s*{INT} {
 
     sscanf(yytext, "%d", (int *) &yylval);
-    return HEIGHT;
+    return B_FREQ;
 }

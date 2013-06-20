@@ -52,7 +52,7 @@ RM    := rm -f
 SED   := sed
 FMT   := fmt -1
 CAT   := cat
-LEX   := flex --bison-bridge -P
+LEX   := flex --bison-bridge
 YACC  := bison
 PROF  := gprof
 FIND   = find $(FDIR) -type d
@@ -87,9 +87,12 @@ VPATH = $(CONFDIR):$(SRCDIR):$(LIBDIR):$(BINDIR):$(TESTDIR):$(HEADDIR)
 
 
 # SOURCE ###############################################################
+PARSER  := $(notdir $(shell ls $(SRCDIR)/*.y))
+SCANNER := $(notdir $(shell ls $(SRCDIR)/*.l))
+
 SRC := $(notdir $(shell ls $(SRCDIR)/*.c))
-SRC += $(patsubst %.y,%.tab.c,$(notdir $(shell ls $(SRCDIR)/*.y)))
-SRC += $($(notdir $(shell ls $(SRCDIR)/*.l)):.l=.yy.c)
+SRC += $(patsubst %.y,%.tab.c,$(PARSER))
+SRC += $(patsubst %.l,%.yy.c, $(SCANNER))
 LIB := $(CONFDIR)/libraries.mk
 DEP := $(addprefix $(CONFDIR)/,$(SRC:.c=.d))
 
@@ -158,7 +161,6 @@ endif # B_INSTALL == 'true'
 
 .PHONY: all
 all: $(DEP) $(addprefix $(BINDIR)/,$(BIN))
-	echo $(SRC)
 -include $(DEP)
 
 ifeq ($(B_INSTALL), 'true')
@@ -238,7 +240,7 @@ $(LIBS): | $(LIBDIR)
 # DEPENDENCIES #########################################################
 $(CONFDIR)/%.d: $(addprefix $(SRCDIR)/,%.c)
 	$(CC) $(CLIBS) -MM $< 1> $@
-	@$(CP)  $@ $@.tmp
+	@$(CP) $@ $@.tmp
 	@$(SED) -e 's/.*:/$(OBJDIR)\/$*.o:/' -i $@
 	@$(SED) -e 's/.*://' -e 's/\\$$//' < $@.tmp | $(FMT) | \
 	  $(SED) -e 's/^ *//' -e 's/$$/:/' >> $@
@@ -261,22 +263,23 @@ endif
 
 
 # SCANNER & PARSER #####################################################
-# ifeq ($(B_ANALYSE), 'true')
+ifeq ($(B_ANALYSE), 'true')
+LDFLAGS += -lfl
+
 %.yy.o: $(addprefix $(SRCDIR)/,%.yy.c) $(addprefix $(SRCDIR)/,%.tab.c)
-	echo $@
 	$(CC) $(CFLAGS) -c $<
 
 %.tab.o: $(addprefix $(SRCDIR)/,%.tab.c)
 	$(CC) $(CFLAGS) -c $<
 
-%.yy.c: $(addprefix $(SRCDIR)/,%.l) $(addprefix $(HEADDIR)/,%.tab.h)
+$(SRCDIR)/%.yy.c: $(addprefix $(SRCDIR)/,%.l) $(addprefix $(HEADDIR)/,$(PARSER:.y=.tab.h))
 	$(LEX) -o $@ $<
 
-%.tab.c: $(addprefix $(SRCDIR)/,%.y)
+$(SRCDIR)/%.tab.c: $(addprefix $(SRCDIR)/,%.y)
 	$(YACC) --defines=$(HEADDIR)/$*.tab.h -o $@ $<
 
 $(HEADDIR)/%.tab.h: $(SRCDIR)/%.tab.c $(SRCDIR)/%.y
-# endif
+endif
 
 
 # TESTS ################################################################
