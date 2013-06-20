@@ -1,6 +1,7 @@
 # Source files
 src/*.tab.c
 src/*.yy.c
+include/*.tab.h
 
 # Object files
 obj/*
