@@ -17,6 +17,9 @@ LDFLAGS += -lm -lallegro -lallegro_primitives
 # Boolean options ('true' or 'false')
 B_PROFILE = 'false'
 B_INSTALL = 'true'
+B_ANALYSE = 'true'
+B_STATLIB = 'true'
+B_SHRDLIB = 'true'
 
 # Options to installation
 ICON 	:= Canoagem.png
@@ -49,7 +52,7 @@ RM    := rm -f
 SED   := sed
 FMT   := fmt -1
 CAT   := cat
-LEX   := flex
+LEX   := flex --bison-bridge -P
 YACC  := bison
 PROF  := gprof
 FIND   = find $(FDIR) -type d
@@ -85,6 +88,8 @@ VPATH = $(CONFDIR):$(SRCDIR):$(LIBDIR):$(BINDIR):$(TESTDIR):$(HEADDIR)
 
 # SOURCE ###############################################################
 SRC := $(notdir $(shell ls $(SRCDIR)/*.c))
+SRC += $(patsubst %.y,%.tab.c,$(notdir $(shell ls $(SRCDIR)/*.y)))
+SRC += $($(notdir $(shell ls $(SRCDIR)/*.l)):.l=.yy.c)
 LIB := $(CONFDIR)/libraries.mk
 DEP := $(addprefix $(CONFDIR)/,$(SRC:.c=.d))
 
@@ -93,6 +98,11 @@ OBJ := $(filter-out $(ARLIB) $(SOLIB),$(SRC)) # Tira bibliotecas
 OBJ := $(filter-out $(EXCLUDE_SRC),$(SRC))    # Tira regras próprias
 OBJ := $(patsubst %.c,%.o,$(OBJ))             # Substitui .c por .o
 OBJ := $(addprefix $(OBJDIR)/,$(OBJ))         # Adiciona diretório
+
+# PARSER  := 
+# SCANNER := $(notdir $(shell ls $(SRCDIR)/*.l))
+# OBJ += $(addprefix $(OBJDIR)/,$(PARSER:.l=.yy.o))
+# OBJ += $(addprefix $(OBJDIR)/,$(SCANNER:.y=.tab.o))
 
 
 # COMPILATION ##########################################################
@@ -148,6 +158,7 @@ endif # B_INSTALL == 'true'
 
 .PHONY: all
 all: $(DEP) $(addprefix $(BINDIR)/,$(BIN))
+	echo $(SRC)
 -include $(DEP)
 
 ifeq ($(B_INSTALL), 'true')
@@ -189,7 +200,8 @@ clean:
 	$(RM) $(OBJDIR)/*.o $(LIBDIR)/*.a $(LIBDIR)/*.so
 	$(RM) $(BINDIR)/gmon.out $(DATADIR)/debug.txt $(OBJDIR)/*.gcda
 	$(RM) $(SRCDIR)/*~ $(HEADDIR)/*~ 
-	$(RM) $(DEP)
+	$(RM) $(SRCDIR)/*.yy.c $(SRCDIR)/*.tab.c $(HEADDIR)/*.tab.h
+	$(RM) $(CONFDIR)/*.d
 	-$(RMDIR) $(OBJDIR) 2> /dev/null
 
 .PHONY: distclean
@@ -234,14 +246,37 @@ $(CONFDIR)/%.d: $(addprefix $(SRCDIR)/,%.c)
 
 
 # STATIC LIBRARIES #####################################################
+ifeq ($(B_STATLIB), 'true')
 lib%.a: $(OBJDIR)/$(notdir %.o)
 	$(AR) $(ARFLAGS) $(LIBDIR)/$@ $<
+endif
 
 
 # SHARED LIBRARIES #####################################################
+ifeq ($(B_SHRDLIB), 'true')
 lib%.so: $(SRCDIR)/%.c
 	$(CC) -fPIC $(CFLAGS) $(CLIBS) -c $< -o $(OBJDIR)/$*.o
 	$(CC) -o $(LIBDIR)/$@ $(SOFLAGS) $(OBJDIR)/$*.o 
+endif
+
+
+# SCANNER & PARSER #####################################################
+# ifeq ($(B_ANALYSE), 'true')
+%.yy.o: $(addprefix $(SRCDIR)/,%.yy.c) $(addprefix $(SRCDIR)/,%.tab.c)
+	echo $@
+	$(CC) $(CFLAGS) -c $<
+
+%.tab.o: $(addprefix $(SRCDIR)/,%.tab.c)
+	$(CC) $(CFLAGS) -c $<
+
+%.yy.c: $(addprefix $(SRCDIR)/,%.l) $(addprefix $(HEADDIR)/,%.tab.h)
+	$(LEX) -o $@ $<
+
+%.tab.c: $(addprefix $(SRCDIR)/,%.y)
+	$(YACC) --defines=$(HEADDIR)/$*.tab.h -o $@ $<
+
+$(HEADDIR)/%.tab.h: $(SRCDIR)/%.tab.c $(SRCDIR)/%.y
+# endif
 
 
 # TESTS ################################################################
