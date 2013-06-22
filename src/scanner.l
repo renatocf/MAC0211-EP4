@@ -27,6 +27,10 @@ FREQUENCIA ["FREQUENCIA"|"Frequencia"|"frequencia"]
 SEP        :
 
 %{
+    /* Bibliotecas-padrão */
+    #include <stdio.h>
+    #include <string.h>
+    
     /* Header criado pelo parser */
     #include "parser.tab.h"
     
@@ -35,6 +39,13 @@ SEP        :
      * pelo Flex */
     extern YYSTYPE yylval;
 %}
+
+/* Para ficar livre dos 'warnings': input, yyunput e fileno. */
+/* A opção correspondente a 'fileno' evitada com 'never-interactive'
+ * é útil, mas ela desabilita que o flex leia entradas interativas */
+%option noinput
+%option nounput
+%option never-interactive
 
 %%
 
