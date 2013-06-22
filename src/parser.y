@@ -28,14 +28,18 @@
     Options yygetopt();
 %}
 
-%token B_FLUX      
-%token B_HEIGHT    
-%token B_LENGTH    
-%token B_ZONE      
-%token B_ISLAND    
-%token B_SEED      
-%token B_FREQ      
-%token B_SPEEDY    
+%union {
+    float f;
+    int i;
+}
+
+%token <f> B_FLUX      
+%token <i> B_HEIGHT    
+%token <i> B_LENGTH    
+%token <i> B_ZONE      
+%token <f> B_ISLAND    
+%token <i> B_SEED      
+%token <i> B_FREQ      
 
 %%
 
