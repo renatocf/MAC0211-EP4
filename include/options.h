@@ -1,6 +1,3 @@
-#ifndef H_OPTIONS_DEFINED
-#define H_OPTIONS_DEFINED
-
 /***************************************************/
 /**  MAC 0211  -  Laboratório de Programação I    **/
 /**  IME-USP   -  Primeiro  Semestre  de    2013  **/
@@ -16,6 +13,9 @@
 /**  Em caso de eventuais problemas, acesse:      **/
 /**  git@github.com:renatocf/MAC0211-EP4.git      **/
 /***************************************************/
+
+#ifndef H_OPTIONS_DEFINED
+#define H_OPTIONS_DEFINED
 
 /*
 ////////////////////////////////////////////////////////////////////////
