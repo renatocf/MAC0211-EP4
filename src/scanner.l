@@ -38,6 +38,11 @@ SEP        :
      * sintático conforme interpretado 
      * pelo Flex */
     extern YYSTYPE yylval;
+    
+    /* Exporta o yyin para poder ler de
+     * um arquivo. Se o yyin não estiver
+     * definido, o padrão é o stdin */
+    extern FILE *yyin;
 %}
 
 /* Para ficar livre dos 'warnings': input, yyunput e fileno. */
