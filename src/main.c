@@ -35,6 +35,12 @@
 #include "getopt.h"
 #include "allegro.h"
 #include "options.h"
+/* #include "scanner.yy.h" */
+#include "parser.tab.h"
+
+extern FILE *yyin;
+extern int yyparse();
+extern Options yygetopt();
 
 /*
 ////////////////////////////////////////////////////////////////////////
@@ -93,24 +99,42 @@ int main(int argc, char **argv)
         Options args = { FLUX, HEIGHT, LENGTH, ITERATIONS, ZONE, 
                          ISLAND, SEED, FREQ, STDOUT, 0, 0, 0};
 
-    /** ARGUMENTOS/MENU ***********************************************/
+    /** ARGUMENTOS/MENU/CONFIGURAÇÕES *********************************/
         func_err = receive_arguments(argc, argv, &args);
         if(func_err) return EXIT_FAILURE;
-
+        
         if(args.h == 1)
         {
             printf("\n%s\n", help);
             return EXIT_SUCCESS;
         }
-
+        
+        func_err = system("find options.conf &> /dev/null");
+        if(!func_err)
+        {
+            fprintf(stderr, "ENTROU!\n");
+            /* Arquivo de configuração: options.conf 
+             * Guarda o stream no padrão yyin do scanner */
+            yyin = fopen("options.conf", "r"); 
+            
+            fprintf(stderr, "PARSEANDO!\n");
+            /* Chama o parser para ler opções */
+            yyparse(); args = yygetopt();
+            
+            fprintf(stderr, "FECHANDO!\n");
+            /* Fecha o arquivo configurado para leitura */
+            fclose(yyin);
+        }
+        else printf("options.conf não identificado\n");
+        
         /* Modo de teste: */
         test_mode = args.t + args.T;
-
+        
         /* Chamada para o nosso menu do usuário:
          * Quando ele devolve 'falha', o usuário quer sair do jogo */
         if(!test_mode) func_err = menu(&args);
         if(func_err == EXIT_FAILURE) return EXIT_SUCCESS;
-
+        
     /** CONFIGURAÇÕES DO RIO ******************************************/
         river_config_flux    (args.F);
         river_config_size    (args.L, args.H);
@@ -119,7 +143,7 @@ int main(int argc, char **argv)
 
     /** ANIMAÇÃO DO RIO ***********************************************/
         test_mode = args.t + args.T;
-
+        
         river_animation_init();
         if(test_mode) analyse_program(args.s, args.N, test_mode, args.o);
         else

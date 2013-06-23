@@ -24,6 +24,7 @@
     
     /* Protótipos */
     extern int yylex();
+    extern int yyparse();
     int yyerror(const char *str);
     Options yygetopt();
 %}
@@ -65,7 +66,7 @@ exp: B_FLUX     { scanner.F = $1; }
 /* Função correspondente à tratamento de erro */
 int yyerror(const char *s) 
 {
-    fprintf(stderr, "%s\n", s);
+    fprintf(stderr, "Bison: Error in: %s\n", s);
     return -1;
 }
 

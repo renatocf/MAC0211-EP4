@@ -39,6 +39,10 @@ SEP        :
      * pelo Flex */
     extern YYSTYPE yylval;
     
+    /* Função do scanner disponível 
+     * para ser usada pelo usuário */
+    extern int yylex();
+    
     /* Exporta o yyin para poder ler de
      * um arquivo. Se o yyin não estiver
      * definido, o padrão é o stdin */
