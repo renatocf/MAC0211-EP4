@@ -202,7 +202,8 @@ clean:
 	$(RM) $(OBJDIR)/*.o $(LIBDIR)/*.a $(LIBDIR)/*.so
 	$(RM) $(BINDIR)/gmon.out $(DATADIR)/debug.txt $(OBJDIR)/*.gcda
 	$(RM) $(SRCDIR)/*~ $(HEADDIR)/*~ 
-	$(RM) $(SRCDIR)/*.yy.c $(SRCDIR)/*.tab.c $(HEADDIR)/*.tab.h
+	$(RM) $(SRCDIR)/*.yy.c $(HEADDIR)/*.yy.h
+	$(RM) $(SRCDIR)/*.tab.c $(HEADDIR)/*.tab.h
 	$(RM) $(CONFDIR)/*.d
 	-$(RMDIR) $(OBJDIR) 2> /dev/null
 
@@ -273,11 +274,12 @@ LDFLAGS += -lfl
 	$(CC) $(CFLAGS) -c $<
 
 $(SRCDIR)/%.yy.c: $(addprefix $(SRCDIR)/,%.l) $(addprefix $(HEADDIR)/,$(PARSER:.y=.tab.h))
-	$(LEX) -o $@ $<
+	$(LEX) --header-file=$(HEADDIR)/$*.yy.h -o $@ $<
 
 $(SRCDIR)/%.tab.c: $(addprefix $(SRCDIR)/,%.y)
 	$(YACC) --defines=$(HEADDIR)/$*.tab.h -o $@ $<
 
+$(HEADDIR)/%.yy.h: $(SRCDIR)/%.yy.c $(SRCDIR)/%.l
 $(HEADDIR)/%.tab.h: $(SRCDIR)/%.tab.c $(SRCDIR)/%.y
 endif
 
