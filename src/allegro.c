@@ -12,6 +12,8 @@
 
 /* Bibliotecas gráficas */
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_native_dialog.h>
+
 
 /* Bibliotecas internas */
 #include "allegro.h"
@@ -165,12 +167,10 @@ void gui_boat_create(float x, float y)
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
 
-void gui_arrow_right()
-{
-    al_clear_to_color(al_map_rgb(0, 0, 0));
-}
 
-void gui_arrow_left()
+void batida(int n)
 {
-
+ al_show_native_message_box(NULL, "Jogo das Canoas",
+                "Atenção:", "Você perdeu uma vida!!! ",
+                NULL, ALLEGRO_MESSAGEBOX_WARN);
 }

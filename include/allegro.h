@@ -5,12 +5,13 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
+#include <allegro.h>
+#include "river.h"
 
 
 /* Variáveis globais para criação de janelas e eventos */
 ALLEGRO_DISPLAY *window;
 ALLEGRO_EVENT_QUEUE *event_queue;
-float boat_position;
 
 /* Inicialização da GUI */
 void gui_init();
@@ -31,10 +32,9 @@ void gui_river_create_margin (int x1, int y1,
 /* Funções para manipulação do barco */
 void gui_boat_create (float x, float y);
 
+void batida(int n);
 
 
-/* Funções que manipulam a movimentação do barco controladas pelas teclas */
-void gui_arrow_right();
-void gui_arrow_left();
+
 
 #endif

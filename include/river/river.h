@@ -18,7 +18,8 @@
 #define H_RIVER_DEFINED
 
 
- float boat_position;
+ int boat_position;
+ int vidas;
 
 /* Funções para configuração de parâmetros */
 void river_config_flux        (float);
