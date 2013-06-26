@@ -207,6 +207,8 @@ void *yyalloc (yy_size_t  );
 void *yyrealloc (void *,yy_size_t  );
 void yyfree (void *  );
 
+/* Begin user sect3 */
+
 extern int yylineno;
 
 extern char *yytext;
@@ -258,10 +260,6 @@ int yyget_lineno (void );
 
 void yyset_lineno (int line_number  );
 
-YYSTYPE * yyget_lval (void );
-
-void yyset_lval (YYSTYPE * yylval_param  );
-
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
  */
@@ -307,11 +305,9 @@ static int yy_flex_strlen (yyconst char * );
 #ifndef YY_DECL
 #define YY_DECL_IS_OURS 1
 
-extern int yylex \
-               (YYSTYPE * yylval_param );
+extern int yylex (void);
 
-#define YY_DECL int yylex \
-               (YYSTYPE * yylval_param )
+#define YY_DECL int yylex (void)
 #endif /* !YY_DECL */
 
 /* yy_get_previous_state - get the state just before the EOB char was reached */
@@ -328,8 +324,9 @@ extern int yylex \
 #undef YY_DECL
 #endif
 
-#line 104 "src/scanner.l"
+#line 114 "src/scanner.l"
 
-#line 334 "include/scanner.yy.h"
+
+#line 331 "include/scanner.yy.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

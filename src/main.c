@@ -109,7 +109,7 @@ int main(int argc, char **argv)
             return EXIT_SUCCESS;
         }
         
-        func_err = system("find options.conf; return $?");
+        func_err = system("find options.conf &> /dev/null; return $?");
         if(!func_err)
         {
             fprintf(stderr, "ENTROU!\n");
@@ -119,7 +119,15 @@ int main(int argc, char **argv)
             
             fprintf(stderr, "PARSEANDO!\n");
             /* Chama o parser para ler opções */
-            yyparse(); args = yygetopt();
+            func_err = yyparse(); 
+            if(func_err)
+            {
+                fprintf(stderr, "Problemas no arquivo de configuração!\n");
+                return EXIT_FAILURE;
+            }
+            
+            /* Atribui opções nos argumentos */
+            args = yygetopt();
             
             fprintf(stderr, "FECHANDO!\n");
             /* Fecha o arquivo configurado para leitura */

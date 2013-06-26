@@ -52,8 +52,8 @@ RM    := rm -f
 SED   := sed
 FMT   := fmt -1
 CAT   := cat
-LEX   := flex --bison-bridge
-YACC  := bison
+LEX   := flex 
+YACC  := bison -v -t
 PROF  := gprof
 FIND   = find $(FDIR) -type d
 MKDIR := mkdir -p
@@ -160,7 +160,7 @@ endif # B_INSTALL == 'true'
 ########################################################################
 
 .PHONY: all
-all: $(DEP) $(addprefix $(BINDIR)/,$(BIN))
+all: Makefile $(DEP) $(addprefix $(BINDIR)/,$(BIN))
 -include $(DEP)
 
 ifeq ($(B_INSTALL), 'true')

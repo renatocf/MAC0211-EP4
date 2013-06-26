@@ -3,7 +3,7 @@
  **  IME-USP   -  Primeiro  Semestre  de    2013  **
  **  Turma 45  -  Kelly Rosa Bragheto             **
  **                                               **
- **  Segundo   Exercício-Programa                 **
+ **  Quarto    Exercício-Programa                 **
  **  Arquivo:  scanner.l                          **
  **                                               **
  **  Karina Suemi Awoki                  7572102  **
@@ -11,7 +11,7 @@
  **  Ruan de Menezes Costa               7990929  **
  **                                               **
  **  Em caso de eventuais problemas, acesse:      **
- **  git@github.com:renatocf/MAC0211-EP2.git      **
+ **  git@github.com:renatocf/MAC0211-EP4.git      **
  ***************************************************/
 
 FLOAT      [0-9]*\.[0-9]+
@@ -29,6 +29,7 @@ SEP        :
 %{
     /* Bibliotecas-padrão */
     #include <stdio.h>
+    #include <stdlib.h>
     #include <string.h>
     
     /* Header criado pelo parser */
@@ -58,46 +59,56 @@ SEP        :
 
 %%
 
-[ \t]*                      ;
+[\n<<EOF>>]               { return EOL; }
+
+[ \t]*                    ;
 
 {FLUXO}\s*{SEP}\s*{FLOAT} {
     
-    sscanf(yytext, "%f", (float *) &yylval);
+    printf("AAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+    yylval.f_value = (float) atof(yytext);
     return B_FLUX;
 }
 
 {ALTURA}\s*{SEP}\s*{INT} {
     
-    sscanf(yytext, "%d", (int *) &yylval);
+    printf("AAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+    /*sscanf(yytext, "%d", &yylval.i_value);*/
+    /*yylval.i_value = strtol(yytext);*/
+    yylval.i_value = (int) strtol(yytext, NULL, 0);
+    printf("%s\n", yytext);
+    printf("yylval: %d\n", yylval.i_value);
     return B_HEIGHT;
 }
 
 {LARGURA}\s*{SEP}\s*{INT} {
 
-    sscanf(yytext, "%d", (int *) &yylval);
+    yylval.i_value = (int) atoi(yytext);
     return B_LENGTH;
 }
 
 {ZONA}\s*{SEP}\s*{INT} {
 
-    sscanf(yytext, "%d", (int *) &yylval);
+    yylval.i_value = (int) atoi(yytext);
     return B_ZONE;
 }
 
 {ILHAS}\s*{SEP}\s*FLOAT {
 
-    sscanf(yytext, "%f", (float *) &yylval);
+    yylval.f_value = (float) atof(yytext);
     return B_ISLAND;
 }
 
 {SEMENTE}\s*{SEP}\s*{INT} {
 
-    sscanf(yytext, "%d", (int *) &yylval);
+    yylval.i_value = (int) atoi(yytext);
     return B_SEED;
 }
 
 {FREQUENCIA}\s*{SEP}\s*{INT} {
 
-    sscanf(yytext, "%d", (int *) &yylval);
+    yylval.i_value = (int) atoi(yytext);
     return B_FREQ;
 }
+
+%%
