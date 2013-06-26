@@ -30,13 +30,14 @@
 void gui_init()
 {
     /* Inicializa a biblioteca allegro */
-    al_init(); al_init_primitives_addon();
+    al_init();
+    al_init_primitives_addon();
 }
 
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------
-                              JANELA     
+                              JANELA
 -----------------------------------------------------------------------
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
@@ -44,7 +45,7 @@ void gui_window_create(int length, int height)
 {
     event_queue = NULL;
     event_queue = al_create_event_queue();
-    
+
     /* Variável representando a janela principal */
     window = NULL;
 
@@ -64,6 +65,13 @@ void gui_window_create(int length, int height)
 
     al_set_window_title(window, "Jogo da canoa");
     al_register_event_source(event_queue, al_get_display_event_source(window));
+
+    if (!al_install_keyboard())
+    {
+        fprintf(stderr, "Falha ao inicializar o teclado.\n");
+    }
+    al_register_event_source(event_queue, al_get_keyboard_event_source());
+    al_register_event_source(event_queue, al_get_display_event_source(window));
 }
 
 int gui_window_destroy(void)
@@ -79,6 +87,23 @@ int gui_window_destroy(void)
             al_destroy_display(window);
             return 1;
         }
+
+
+        else if (event.type == ALLEGRO_EVENT_KEY_DOWN)
+        {
+            switch(event.keyboard.keycode)
+            {
+                case ALLEGRO_KEY_LEFT:
+                    movement(1);
+                    break;
+                case ALLEGRO_KEY_RIGHT:
+                    movement(2);
+                    break;
+            }
+        }
+
+
+
     }
     return 0;
 }
@@ -96,7 +121,7 @@ void gui_window_update()
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------
-                                RIO       
+                                RIO
 -----------------------------------------------------------------------
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
@@ -121,7 +146,7 @@ void gui_river_create_margin(int x1, int y1, int x2, int y2, int x3, int y3)
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------
-                              BARCO        
+                              BARCO
 -----------------------------------------------------------------------
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
@@ -131,3 +156,21 @@ void gui_boat_create(float x, float y)
     al_draw_filled_ellipse(x, y -20.0 ,10.0 , 20.0, al_map_rgb(139, 87, 66));
 }
 
+
+/*
+////////////////////////////////////////////////////////////////////////
+-----------------------------------------------------------------------
+                             MOVIMENTO
+-----------------------------------------------------------------------
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+*/
+
+void gui_arrow_right()
+{
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+}
+
+void gui_arrow_left()
+{
+
+}

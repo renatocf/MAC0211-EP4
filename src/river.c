@@ -19,6 +19,9 @@
 #include "strip.h"
 #include "river-internal.h"
 
+
+
+
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------
@@ -61,6 +64,7 @@ int old_left_margin = -1; int old_right_margin = -1;
 void river_animation_init()
 {
     gui_init();
+    boat_position = Config.length * 2.5;
     gui_window_create(Config.length * 5, Config.height * 5);
 }
 
@@ -130,7 +134,7 @@ int river_animation_iterate()
     /** IMPRIME RIO ***************************************************/
         gui_window_clear();
         list_select(river, HEAD, strip_print);
-        gui_boat_create(Config.length * 2.5, frame_height);
+        gui_boat_create(boat_position, frame_height);
         gui_window_update();
 
         if(gui_window_destroy()) return EXIT_FAILURE;
@@ -223,4 +227,24 @@ void river_animation_finish()
 {
     list_free(river);
     river = NULL; base = NULL;
+}
+
+
+void movement(int key)
+{
+
+
+    if (key)
+    {
+        switch (key)
+        {
+            case 1:
+                boat_position-=5;
+                break;
+            case 2:
+
+                boat_position+=5;
+                break;
+        }
+    }
 }
