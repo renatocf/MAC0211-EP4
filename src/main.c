@@ -109,7 +109,7 @@ int main(int argc, char **argv)
             return EXIT_SUCCESS;
         }
         
-        func_err = system("find options.conf &> /dev/null");
+        func_err = system("find options.conf; return $?");
         if(!func_err)
         {
             fprintf(stderr, "ENTROU!\n");
