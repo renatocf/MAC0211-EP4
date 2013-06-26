@@ -19,6 +19,10 @@
 #include "strip.h"
 #include "river-internal.h"
 
+
+
+TStrip strip1;
+
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------
@@ -60,7 +64,9 @@ int old_left_margin = -1; int old_right_margin = -1;
 */
 void river_animation_init()
 {
+    vidas = 10;
     gui_init();
+    boat_position = (int)(Config.length/2.0);
     gui_window_create(Config.length * 5, Config.height * 5);
 }
 
@@ -130,7 +136,17 @@ int river_animation_iterate()
     /** IMPRIME RIO ***************************************************/
         gui_window_clear();
         list_select(river, HEAD, strip_print);
-        gui_boat_create(Config.length * 2.5, frame_height);
+        /*Barco bateu, recomeça do meio*/
+        if(strip1[boat_position].t == LAND || strip1[boat_position-1].t == LAND
+           || strip1[boat_position-2].t == LAND || strip1[boat_position+1].t == LAND)
+        {
+            vidas--;
+            batida(vidas);
+            boat_position = (int)(Config.length/2.0);
+
+        }
+
+        gui_boat_create(boat_position*5, frame_height);
         gui_window_update();
 
         if(gui_window_destroy()) return EXIT_FAILURE;
@@ -139,12 +155,13 @@ int river_animation_iterate()
 
 void strip_print(TStrip strip)
 {
+
     /** VARIÁVEIS *****************************************************/
         int old_m_l = 0;    /* Posição da margem esquerda anterior   */
         int old_m_r = 0;    /* Posição da margem direita anterior    */
         int i = 0, k = 0;   /* Contadores auxiliares para  */
         int control1 = 0;
-
+  strip1 = strip;
         for(i = 0; i < Config.length-1; i++)
             if(strip[i].t == WATER && strip[i+1].t == LAND) k++;
 
@@ -221,6 +238,29 @@ void strip_print(TStrip strip)
 
 void river_animation_finish()
 {
+    printf("oiiiii cone!\n");
     list_free(river);
+    printf("oiiiii coneeeeee2!!\n");
     river = NULL; base = NULL;
+
+}
+
+
+void movement(int key)
+{
+
+
+    if (key)
+    {
+        switch (key)
+        {
+            case 1:
+                boat_position--;
+                break;
+            case 2:
+
+                boat_position++;
+                break;
+        }
+    }
 }

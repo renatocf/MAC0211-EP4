@@ -17,6 +17,10 @@
 #ifndef H_RIVER_DEFINED
 #define H_RIVER_DEFINED
 
+
+ int boat_position;
+ int vidas;
+
 /* Funções para configuração de parâmetros */
 void river_config_flux        (float);
 void river_config_size        (int, int);   /* largura/altura */
@@ -28,5 +32,6 @@ void river_animation_init();
 void river_animation_generate (int);        /* semente */
 int river_animation_iterate  ();
 void river_animation_finish   ();
+void movement(int key);
 
 #endif

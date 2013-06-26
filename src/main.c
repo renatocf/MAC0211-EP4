@@ -96,13 +96,13 @@ int main(int argc, char **argv)
         clock_t end;       /* Fim do relógio (para animação)         */
 
         /* Struct com argumentos da linha de comando */
-        Options args = { FLUX, HEIGHT, LENGTH, ITERATIONS, ZONE, 
+        Options args = { FLUX, HEIGHT, LENGTH, ITERATIONS, ZONE,
                          ISLAND, SEED, FREQ, STDOUT, 0, 0, 0};
 
     /** ARGUMENTOS/MENU/CONFIGURAÇÕES *********************************/
         func_err = receive_arguments(argc, argv, &args);
         if(func_err) return EXIT_FAILURE;
-        
+
         if(args.h == 1)
         {
             printf("\n%s\n", help);
@@ -113,10 +113,10 @@ int main(int argc, char **argv)
         if(!func_err)
         {
             fprintf(stderr, "ENTROU!\n");
-            /* Arquivo de configuração: options.conf 
+            /* Arquivo de configuração: options.conf
              * Guarda o stream no padrão yyin do scanner */
-            yyin = fopen("options.conf", "r"); 
-            
+            yyin = fopen("options.conf", "r");
+
             fprintf(stderr, "PARSEANDO!\n");
             /* Chama o parser para ler opções */
             func_err = yyparse(); 
@@ -134,15 +134,15 @@ int main(int argc, char **argv)
             fclose(yyin);
         }
         else printf("options.conf não identificado\n");
-        
+
         /* Modo de teste: */
         test_mode = args.t + args.T;
-        
+
         /* Chamada para o nosso menu do usuário:
          * Quando ele devolve 'falha', o usuário quer sair do jogo */
         if(!test_mode) func_err = menu(&args);
         if(func_err == EXIT_FAILURE) return EXIT_SUCCESS;
-        
+
     /** CONFIGURAÇÕES DO RIO ******************************************/
         river_config_flux    (args.F);
         river_config_size    (args.L, args.H);
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 
     /** ANIMAÇÃO DO RIO ***********************************************/
         test_mode = args.t + args.T;
-        
+
         river_animation_init();
         if(test_mode) analyse_program(args.s, args.N, test_mode, args.o);
         else
@@ -160,8 +160,27 @@ int main(int argc, char **argv)
             while(!exit)
             {
                 end = init = clock();
-                while(end-init < INTERVAL) end = clock();
+                while(end-init < INTERVAL)
+                {
+
+
+
+                    end = clock();
+                }
                 exit = river_animation_iterate();
+
+
+
+
+                /*******************************************************************************************/
+
+
+        /**************************************************************************************************/
+
+
+
+
+
             }
         }
 
@@ -316,23 +335,23 @@ static void configurations(Options *args)
     printf(" Deseja configurar o fluxo do rio? "); scanf(" %c", &ans);
     if(ans == 's' || ans == 'y' || ans == 'S' || ans == 'Y')
     { printf(" Fluxo do rio: "); scanf("%f", &args->F); }
-    
+
     printf(" Deseja configurar a altura do rio? "); scanf(" %c", &ans);
     if(ans == 's' || ans == 'y' || ans == 'S' || ans == 'Y')
     { printf(" Altura do rio: "); scanf("%d", &args->H); }
-    
+
     printf(" Deseja configurar a largura do rio? "); scanf(" %c", &ans);
     if(ans == 's' || ans == 'y' || ans == 'S' || ans == 'Y')
     { printf(" Largura do rio: "); scanf("%d", &args->L); }
-    
+
     printf(" Deseja configurar a distância mínima entre as margens? "); scanf(" %c", &ans);
     if(ans == 's' || ans == 'y' || ans == 'S' || ans == 'Y')
     { printf(" Distância mínima das margens: "); scanf("%d", &args->Z); }
-    
+
     printf(" Deseja configurar a distância mínima entre ilhas? "); scanf(" %c", &ans);
     if(ans == 's' || ans == 'y' || ans == 'S' || ans == 'Y')
     { printf(" Distancia mínima entre ilhas: "); scanf("%d", &args->f); }
-    
+
     printf(" Deseja configurar a probabilidade de gerar ilhas? "); scanf(" %c", &ans);
     if(ans == 's' || ans == 'y' || ans == 'S' || ans == 'Y')
     { printf(" Probabilidade de gerar ilhas: "); scanf("%f", &args->i); }
