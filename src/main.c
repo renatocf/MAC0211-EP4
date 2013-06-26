@@ -270,7 +270,7 @@ static int menu(Options *args)
         while(1)
         {
             printf(" Selecione sua opção: ");
-            scanf(" %d", &option);
+            scanf(" %d", &option); while(getchar() != '\n');
 
             /* JOGAR */
             if(option == 1)
