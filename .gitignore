@@ -6,6 +6,7 @@ include/*.tab.h
 # Object files
 obj/*
 *.o
+*.orig
 
 # Configure files
 *.d
