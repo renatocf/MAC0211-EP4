@@ -81,8 +81,8 @@ int boat_hpos;
 void river_animation_init()
 {
     gui_init();
-    boat_vpos = (int) (Config.length/2.0); 
-    boat_hpos = frame_height;
+    boat_hpos = (int) (Config.length/2.0); 
+    boat_vpos = frame_height;
     
     gui_window_create(Config.length * 5, Config.height * 5);
     
@@ -129,7 +129,7 @@ void river_animation_generate(int seed)
         
     /** IMPRIME RIO ***************************************************/
         gui_window_clear();
-        gui_boat_start((Config.length/2.0) * 5, frame_height);
+        /* gui_boat_start((Config.length/2.0) * 5, frame_height); */
         list_select(river, HEAD, strip_print);
         gui_window_update();
 }
@@ -155,28 +155,28 @@ int river_animation_iterate()
         base = top; list_insert(river, new_node);
         
     /** IMPRIME RIO ***************************************************/
+        if(gui_event_get() == CLOSE) return EXIT_FAILURE;
         gui_window_clear();
         list_select(river, HEAD, strip_print);
         
+        printf("%d %d\n", boat_hpos, frame_height);
+        gui_boat_draw(&boat_hpos, &boat_vpos, 5);
+        
         /* Barco bateu, recomeça do meio */
-        if(strip1[boat_vpos].t == LAND 
-        || strip1[boat_vpos-1].t == LAND
-        || strip1[boat_vpos-2].t == LAND 
-        || strip1[boat_vpos+1].t == LAND)
+        if(strip1[boat_hpos].t == LAND 
+        || strip1[boat_hpos-1].t == LAND
+        || strip1[boat_hpos-2].t == LAND 
+        || strip1[boat_hpos+1].t == LAND)
         {
             P1.lifes--; gui_boat_shock(P1.lifes);
-            gui_boat_start((Config.length/2.0) * 5, frame_height);
-            boat_vpos = (int) (Config.length/2.0);
+            boat_hpos = (int) (Config.length/2.0);
+            boat_vpos = frame_height/5;
         }
         
-        printf("%d %d\n", boat_hpos, frame_height);
-        gui_boat_draw(); /* create(boat_vpos * 5, frame_height); */
         gui_window_update();
         
         /* Fim de Jogo */
         if(P1.lifes == 0) return GAME_OVER;
-        
-        if(gui_event_get() == CLOSE) return EXIT_FAILURE;
         return EXIT_SUCCESS;
 }
 

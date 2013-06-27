@@ -34,6 +34,20 @@
 #define MOVE_DOWN   4
 #define STOP_DOWN  -4
 
+
+/*
+////////////////////////////////////////////////////////////////////////
+-----------------------------------------------------------------------
+                       PROTÓTIPOS INTERNOS
+-----------------------------------------------------------------------
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+*/
+
+static void gui_boat_move (int move);
+
+/* Esquerda, baixo, cima, direita */
+static int mov[4] = {0, 0, 0, 0}; 
+
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------
@@ -68,13 +82,13 @@ void gui_window_create(int length, int height)
 {
     /* Variável representando a janela principal */
     window = NULL;
-
+    
     /* Criamos a nossa janela - dimensões de largura x altura pixels */
     window = al_create_display(length, height);
 
     /* Preenchemos a janela de branco */
     al_clear_to_color(al_map_rgb(255, 255, 255));
-
+    
     /* Atualiza a tela */
     al_flip_display();
     if (!event_queue)
@@ -82,7 +96,7 @@ void gui_window_create(int length, int height)
         fprintf(stderr, "Falha ao criar fila de eventos.\n");
         gui_window_destroy();
     }
-
+    
     al_set_window_title(window, "Jogo da canoa");
     
     /* Associa teclado com a janela */
@@ -199,17 +213,23 @@ void gui_river_create_margin(int x1, int y1, int x2, int y2, int x3, int y3)
 -----------------------------------------------------------------------
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
-
+/*
 static int boat_vpos, boat_hpos;
 
 void gui_boat_start(float x, float y)
 {
     boat_vpos = x; boat_hpos = y;
 }
-
-void gui_boat_draw()
+*/
+void gui_boat_draw(int *x, int *y, int prop)
 {
-    al_draw_filled_ellipse(boat_vpos, boat_hpos-20.0, 
+    /* Realiza o movimento */
+    if(mov[LEFT])  (*x) -= 0.5 * prop;
+    if(mov[RIGHT]) (*x) += 0.5 * prop;
+    if(mov[DOWN])  (*y) -= 0.5 * prop;
+    if(mov[UP])    (*y) += 0.5 * prop;
+    
+    al_draw_filled_ellipse((*x * prop), (*y * prop)-20.0, 
             10.0, 20.0, al_map_rgb(139, 87, 66));
 }
 
@@ -223,6 +243,9 @@ void gui_boat_shock(int n)
     /* Cria e exibe diálogo de erro */
     al_show_native_message_box(
         NULL, title, heading, text, NULL, ALLEGRO_MESSAGEBOX_WARN);
+    
+    /* Reseta movimentos */
+    mov[0] = 0; mov[1] = 0; mov[2] = 0; mov[3] = 0;
 }
 
 /*
@@ -232,12 +255,9 @@ void gui_boat_shock(int n)
 -----------------------------------------------------------------------
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
-
-/* Esquerda, baixo, cima, direita */
-static int mov[4] = {0, 0, 0, 0}; 
-void gui_boat_move(int key)
+static void gui_boat_move(int key)
 {
-    switch (key)
+    switch(key)
     {
         /* Caso padrão para apenas animar */
         case NOP:
@@ -265,10 +285,4 @@ void gui_boat_move(int key)
         default:
             break;
     }
-    
-    /* Realiza o movimento */
-    if(mov[LEFT])  boat_vpos--;
-    if(mov[RIGHT]) boat_vpos++;
-    if(mov[DOWN])  boat_vpos--;
-    if(mov[UP])    boat_vpos++;
 }

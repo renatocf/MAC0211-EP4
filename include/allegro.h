@@ -30,8 +30,7 @@ void gui_river_create_margin (int x1, int y1,
                               int x3, int y3);
 
 /* Funções para manipulação do barco */
-void gui_boat_draw   (void);
-void gui_boat_move   (int move);
+void gui_boat_draw   (int *x, int *y, int proportion);
 void gui_boat_start  (float x, float y);
 void gui_boat_shock  (int n);
 
