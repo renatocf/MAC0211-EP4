@@ -20,7 +20,7 @@ void gui_init();
 void gui_window_clear   (void);
 void gui_window_update  (void);
 void gui_window_create  (int length, int height);
-int  gui_window_destroy (void);
+void gui_window_destroy (void);
 
 /* Funções de manipulação do rio */
 void gui_river_create_land   (float x1, float y1);
@@ -30,11 +30,15 @@ void gui_river_create_margin (int x1, int y1,
                               int x3, int y3);
 
 /* Funções para manipulação do barco */
-void gui_boat_create (float x, float y);
+void gui_boat_draw   (void);
+void gui_boat_move   (int move);
+void gui_boat_start  (float x, float y);
+void gui_boat_shock  (int n);
 
-void batida(int n);
+/* Funções para o teclado */
+int  gui_keyboard_init (void);
 
-
-
+#define CLOSE 1
+int gui_event_get(void);
 
 #endif

@@ -14,12 +14,25 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_native_dialog.h>
 
-
 /* Bibliotecas internas */
 #include "allegro.h"
 
 /* Macros */
-#define WINDOW_DEFATULT_COLOR (0, 0, 0)
+#define LEFT  0
+#define DOWN  1
+#define UP    2
+#define RIGHT 3
+
+#define NOP         0
+#define MOVE_LEFT   1
+#define STOP_LEFT  -1
+#define MOVE_RIGHT  2
+#define STOP_RIGHT -2
+
+#define MOVE_UP     3
+#define STOP_UP    -3
+#define MOVE_DOWN   4
+#define STOP_DOWN  -4
 
 /*
 ////////////////////////////////////////////////////////////////////////
@@ -34,6 +47,13 @@ void gui_init()
     /* Inicializa a biblioteca allegro */
     al_init();
     al_init_primitives_addon();
+    
+    /* Cria fila de eventos */
+    event_queue = NULL;
+    event_queue = al_create_event_queue();
+    
+    if(!gui_keyboard_init())
+        fprintf(stderr, "Falha ao inicializar o teclado.\n");
 }
 
 /*
@@ -43,11 +63,9 @@ void gui_init()
 -----------------------------------------------------------------------
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
+
 void gui_window_create(int length, int height)
 {
-    event_queue = NULL;
-    event_queue = al_create_event_queue();
-
     /* Variável representando a janela principal */
     window = NULL;
 
@@ -62,52 +80,63 @@ void gui_window_create(int length, int height)
     if (!event_queue)
     {
         fprintf(stderr, "Falha ao criar fila de eventos.\n");
-        al_destroy_display(window);
+        gui_window_destroy();
     }
 
     al_set_window_title(window, "Jogo da canoa");
-    al_register_event_source(event_queue, al_get_display_event_source(window));
-
-    if (!al_install_keyboard())
-    {
-        fprintf(stderr, "Falha ao inicializar o teclado.\n");
-    }
-    al_register_event_source(event_queue, al_get_keyboard_event_source());
-    al_register_event_source(event_queue, al_get_display_event_source(window));
+    
+    /* Associa teclado com a janela */
+    al_register_event_source(event_queue, 
+        al_get_display_event_source(window));
 }
 
-int gui_window_destroy(void)
+int gui_event_get(void)
 {
     if (!al_is_event_queue_empty(event_queue))
     {
         ALLEGRO_EVENT event;
         al_wait_for_event(event_queue, &event);
-
+        
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-        {
+        { 
             al_destroy_event_queue(event_queue);
-            al_destroy_display(window);
-            return 1;
+            gui_window_destroy();
+            return CLOSE; 
         }
-
-
+        
         else if (event.type == ALLEGRO_EVENT_KEY_DOWN)
         {
             switch(event.keyboard.keycode)
             {
                 case ALLEGRO_KEY_LEFT:
-                    movement(1);
+                    gui_boat_move(1);
                     break;
                 case ALLEGRO_KEY_RIGHT:
-                    movement(2);
+                    gui_boat_move(2);
                     break;
             }
         }
-
-
-
+        else if (event.type == ALLEGRO_EVENT_KEY_UP)
+        {
+            switch(event.keyboard.keycode)
+            {
+                case ALLEGRO_KEY_LEFT:
+                    gui_boat_move(-1);
+                    break;
+                case ALLEGRO_KEY_RIGHT:
+                    gui_boat_move(-2);
+                    break;
+            }
+        }
     }
     return 0;
+}
+
+void gui_window_destroy()
+{
+    if(window != NULL) 
+        al_destroy_display(window); 
+    window = NULL;
 }
 
 void gui_window_clear()
@@ -118,6 +147,24 @@ void gui_window_clear()
 void gui_window_update()
 {
     al_flip_display();
+}
+
+/*
+////////////////////////////////////////////////////////////////////////
+-----------------------------------------------------------------------
+                               TECLADO
+-----------------------------------------------------------------------
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+*/
+
+int gui_keyboard_init(void)
+{ 
+    /* Inicializa teclado */
+    if(!al_install_keyboard()) return 0; /* ERRO */
+    
+    /* Associa teclado à fila de eventos */
+    al_register_event_source(event_queue, al_get_keyboard_event_source());
+    return 1; /* SUCESSO */
 }
 
 /*
@@ -153,11 +200,30 @@ void gui_river_create_margin(int x1, int y1, int x2, int y2, int x3, int y3)
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
 
-void gui_boat_create(float x, float y)
+static int boat_vpos, boat_hpos;
+
+void gui_boat_start(float x, float y)
 {
-    al_draw_filled_ellipse(x, y -20.0 ,10.0 , 20.0, al_map_rgb(139, 87, 66));
+    boat_vpos = x; boat_hpos = y;
 }
 
+void gui_boat_draw()
+{
+    al_draw_filled_ellipse(boat_vpos, boat_hpos-20.0, 
+            10.0, 20.0, al_map_rgb(139, 87, 66));
+}
+
+void gui_boat_shock(int n)
+{
+    /* Mensagens da batida */
+    const char title[]   = "Jogo das Canoas";
+    const char heading[] = "Atenção:";
+    const char text[]    = "Você perdeu uma vida!! ";
+    
+    /* Cria e exibe diálogo de erro */
+    al_show_native_message_box(
+        NULL, title, heading, text, NULL, ALLEGRO_MESSAGEBOX_WARN);
+}
 
 /*
 ////////////////////////////////////////////////////////////////////////
@@ -167,10 +233,42 @@ void gui_boat_create(float x, float y)
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
 
-
-void batida(int n)
+/* Esquerda, baixo, cima, direita */
+static int mov[4] = {0, 0, 0, 0}; 
+void gui_boat_move(int key)
 {
- al_show_native_message_box(NULL, "Jogo das Canoas",
-                "Atenção:", "Você perdeu uma vida!!! ",
-                NULL, ALLEGRO_MESSAGEBOX_WARN);
+    switch (key)
+    {
+        /* Caso padrão para apenas animar */
+        case NOP:
+            break;
+
+        /* Inicia os movimentos: */
+        case MOVE_LEFT:
+            mov[LEFT] = 1;
+            break;
+        
+        case MOVE_RIGHT:
+            mov[RIGHT] = 1;
+            break;
+        
+        /* Interrompe os movimentos: */
+        case STOP_LEFT:
+            mov[LEFT] = 0;
+            break;
+        
+        case STOP_RIGHT:
+            mov[RIGHT] = 0;
+            break;
+
+        /* Caso padrão: não faça nada */
+        default:
+            break;
+    }
+    
+    /* Realiza o movimento */
+    if(mov[LEFT])  boat_vpos--;
+    if(mov[RIGHT]) boat_vpos++;
+    if(mov[DOWN])  boat_vpos--;
+    if(mov[UP])    boat_vpos++;
 }

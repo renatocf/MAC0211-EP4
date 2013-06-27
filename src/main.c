@@ -35,9 +35,9 @@
 #include "getopt.h"
 #include "allegro.h"
 #include "options.h"
-/* #include "scanner.yy.h" */
 #include "parser.tab.h"
 
+/* Variáveis para o parser/scanner */
 extern FILE *yyin;
 extern int yyparse();
 extern Options yygetopt();
@@ -109,14 +109,14 @@ int main(int argc, char **argv)
             return EXIT_SUCCESS;
         }
         
-        func_err = system("find options.conf &> /dev/null; return $?");
+        func_err = system("ls options.conf; return $?");
         if(!func_err)
         {
             fprintf(stderr, "ENTROU!\n");
             /* Arquivo de configuração: options.conf
              * Guarda o stream no padrão yyin do scanner */
             yyin = fopen("options.conf", "r");
-
+            
             fprintf(stderr, "PARSEANDO!\n");
             /* Chama o parser para ler opções */
             func_err = yyparse(); 
@@ -134,59 +134,50 @@ int main(int argc, char **argv)
             fclose(yyin);
         }
         else printf("options.conf não identificado\n");
-
+        
         /* Modo de teste: */
         test_mode = args.t + args.T;
-
-        /* Chamada para o nosso menu do usuário:
-         * Quando ele devolve 'falha', o usuário quer sair do jogo */
-        if(!test_mode) func_err = menu(&args);
-        if(func_err == EXIT_FAILURE) return EXIT_SUCCESS;
-
-    /** CONFIGURAÇÕES DO RIO ******************************************/
-        river_config_flux    (args.F);
-        river_config_size    (args.L, args.H);
-        river_config_island  (args.i, args.f);
-        river_config_margins (args.Z);
-
-    /** ANIMAÇÃO DO RIO ***********************************************/
-        test_mode = args.t + args.T;
-
-        river_animation_init();
-        if(test_mode) analyse_program(args.s, args.N, test_mode, args.o);
-        else
+        
+    /** CICLO DO JOGO *************************************************/
+        while(exit != EXIT_FAILURE)
         {
-            river_animation_generate(args.s);
-            while(!exit)
-            {
-                end = init = clock();
-                while(end-init < INTERVAL)
+            /*- MENU ------------------------------------------------*/
+                /* Chamada para o nosso menu do usuário:
+                 * Quando devolve 'falha', o usuário quer sair */
+                if(!test_mode) func_err = menu(&args);
+                if(func_err == EXIT_FAILURE) break;
+            
+            /*- CONFIGURAÇÕES --------------------------------------*/
+                river_config_flux    (args.F);
+                river_config_size    (args.L, args.H);
+                river_config_island  (args.i, args.f);
+                river_config_margins (args.Z);
+                
+                test_mode = args.t + args.T;
+            
+            /*- ANIMAÇÃO -------------------------------------------*/
+                river_animation_init();
+                if(test_mode) 
+                    analyse_program(args.s, args.N, test_mode, args.o);
+                else
                 {
-
-
-
-                    end = clock();
+                    river_animation_generate(args.s);
+                    while(!exit)
+                    {
+                        end = init = clock();
+                        while(end-init < INTERVAL) end = clock();
+                        exit = river_animation_iterate();
+                    }
                 }
-                exit = river_animation_iterate();
-
-
-
-
-                /*******************************************************************************************/
-
-
-        /**************************************************************************************************/
-
-
-
-
-
-            }
-        }
+            
+            /*- LIBERAÇÃO DE MEMÓRIA ------------------------------*/
+                river_animation_finish();
+                
+        } /* while(exit != EXIT_FAILURE) */
 
     /** LIBERAÇÃO DE MEMÓRIA ******************************************/
         river_animation_finish();
-
+    
     return EXIT_SUCCESS;
 }
 
