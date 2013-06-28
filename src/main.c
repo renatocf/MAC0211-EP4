@@ -38,9 +38,10 @@
 #include "parser.tab.h"
 
 /* Variáveis para o parser/scanner */
-extern FILE *yyin;
-extern int yyparse();
-extern Options yygetopt();
+extern FILE   *yyin;
+extern int     yylex    ();
+extern int     yyparse  ();
+extern Options yygetopt ();
 
 /*
 ////////////////////////////////////////////////////////////////////////
@@ -119,6 +120,9 @@ int main(int argc, char **argv)
             
             fprintf(stderr, "PARSEANDO!\n");
             /* Chama o parser para ler opções */
+            printf("Antes do LEX\n");
+            /* yylex(); */
+            printf("Depois do LEX\n");
             func_err = yyparse(); 
             if(func_err)
             {
@@ -127,7 +131,7 @@ int main(int argc, char **argv)
             }
             
             /* Atribui opções nos argumentos */
-            args = yygetopt();
+            args = yygetopt(&args);
             
             fprintf(stderr, "FECHANDO!\n");
             /* Fecha o arquivo configurado para leitura */

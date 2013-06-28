@@ -20,13 +20,14 @@
     #include "options.h"
     
     /* Variável para opções */
-    Options scanner;
+    Options scanner 
+        = {0, 0, 0, 0, 0, 0, 0, 0, {0}, 0, 0, 0};
     
     /* Protótipos */
     extern int yylex();
     extern int yyparse();
     int yyerror(const char *str);
-    Options yygetopt();
+    Options yygetopt(Options *base);
 %}
 
 %error-verbose
@@ -52,8 +53,7 @@ input: /* empty */
        | input line
 ;
 
-line: EOL | exp EOL
-      /*| error EOL*/
+line: EOL | exp EOL | error EOL
 ;
 
 exp: B_FLUX     { scanner.F = $1; printf("NO BISON: %f\n",$1); }
@@ -74,9 +74,15 @@ int yyerror(const char *s)
     return -1;
 }
 
-Options yygetopt()
+Options yygetopt(Options *base)
 {
-    fprintf(stderr, "%f\n", scanner.F);
-    fprintf(stderr, "L:%d H:%d\n", scanner.L, scanner.H);
-    return scanner;
+    if(scanner.F != 0) base->F = scanner.F; /* Fluxo */
+    if(scanner.H != 0) base->H = scanner.H; /* Altura */
+    else printf("Não....\n");
+    if(scanner.L != 0) base->L = scanner.L; /* Largura */
+    if(scanner.Z != 0) base->Z = scanner.Z; /* Zona de segurança */
+    if(scanner.i != 0) base->i = scanner.i; /* Ilhas */
+    if(scanner.s != 0) base->s = scanner.s; /* Semente */
+    if(scanner.f != 0) base->f = scanner.f; /* Frequência */
+    return *base;
 }

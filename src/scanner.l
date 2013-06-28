@@ -16,13 +16,13 @@
 
 FLOAT      [0-9]*\.[0-9]+
 INT        [0-9]+
-FLUXO      ["FLUXO"|"Fluxo"|"fluxo"]
-ALTURA     ["ALTURA"|"Altura"|"altura"]
-LARGURA    ["LARGURA"|"Largura"|"largura"]
-ZONA       ["ZONA"|"Zona"|"zona"]
-ILHAS      ["ILHAS"|"Ilhas"|"ilhas"]
-SEMENTE    ["SEMENTE"|"Semente"|"semente"]
-FREQUENCIA ["FREQUENCIA"|"Frequencia"|"frequencia"]
+FLUXO      ("FLUXO"|"Fluxo"|"fluxo")
+ALTURA     ("ALTURA"|"Altura"|"altura")
+LARGURA    ("LARGURA"|"Largura"|"largura")
+ZONA       ("ZONA"|"Zona"|"zona")
+ILHAS      ("ILHAS"|"Ilhas"|"ilhas")
+SEMENTE    ("SEMENTE"|"Semente"|"semente")
+FREQUENCIA ("FREQUENCIA"|"Frequencia"|"frequencia")
 
 SEP        :
 
@@ -48,6 +48,10 @@ SEP        :
      * um arquivo. Se o yyin não estiver
      * definido, o padrão é o stdin */
     extern FILE *yyin;
+    
+    /* Auxiliar para percorrer yytext e 
+     * encontrar posição do 1º número */
+    static char *aux;
 %}
 
 /* Para ficar livre dos 'warnings': input, yyunput e fileno. */
@@ -65,49 +69,50 @@ SEP        :
 
 {FLUXO}\s*{SEP}\s*{FLOAT} {
     
-    printf("AAAAAAAAAAAAAAAAAAAAAAAAAA\n");
-    yylval.f_value = (float) atof(yytext);
+    for(aux = yytext; *aux <= '0' || *aux >= '9'; aux++);
+    yylval.f_value = strtod(aux, NULL);
     return B_FLUX;
 }
 
 {ALTURA}\s*{SEP}\s*{INT} {
     
-    printf("AAAAAAAAAAAAAAAAAAAAAAAAAA\n");
-    /*sscanf(yytext, "%d", &yylval.i_value);*/
-    /*yylval.i_value = strtol(yytext);*/
-    yylval.i_value = (int) strtol(yytext, NULL, 0);
-    printf("%s\n", yytext);
-    printf("yylval: %d\n", yylval.i_value);
+    for(aux = yytext; *aux <= '0' || *aux >= '9'; aux++);
+    yylval.i_value = strtol(aux, NULL, 10);
     return B_HEIGHT;
 }
 
 {LARGURA}\s*{SEP}\s*{INT} {
 
-    yylval.i_value = (int) atoi(yytext);
+    for(aux = yytext; *aux <= '0' || *aux >= '9'; aux++);
+    yylval.i_value = strtol(aux, NULL, 10);
     return B_LENGTH;
 }
 
 {ZONA}\s*{SEP}\s*{INT} {
 
-    yylval.i_value = (int) atoi(yytext);
+    for(aux = yytext; *aux <= '0' || *aux >= '9'; aux++);
+    yylval.i_value = strtol(aux, NULL, 10);
     return B_ZONE;
 }
 
 {ILHAS}\s*{SEP}\s*FLOAT {
 
-    yylval.f_value = (float) atof(yytext);
+    for(aux = yytext; *aux <= '0' || *aux >= '9'; aux++);
+    yylval.f_value = strtod(aux, NULL);
     return B_ISLAND;
 }
 
 {SEMENTE}\s*{SEP}\s*{INT} {
 
-    yylval.i_value = (int) atoi(yytext);
+    for(aux = yytext; *aux <= '0' || *aux >= '9'; aux++);
+    yylval.i_value = strtol(aux, NULL, 10);
     return B_SEED;
 }
 
 {FREQUENCIA}\s*{SEP}\s*{INT} {
 
-    yylval.i_value = (int) atoi(yytext);
+    for(aux = yytext; *aux <= '0' || *aux >= '9'; aux++);
+    yylval.i_value = strtol(aux, NULL, 10);
     return B_FREQ;
 }
 
