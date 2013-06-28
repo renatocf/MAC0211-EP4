@@ -78,7 +78,6 @@ Options yygetopt(Options *base)
 {
     if(scanner.F != 0) base->F = scanner.F; /* Fluxo */
     if(scanner.H != 0) base->H = scanner.H; /* Altura */
-    else printf("Não....\n");
     if(scanner.L != 0) base->L = scanner.L; /* Largura */
     if(scanner.Z != 0) base->Z = scanner.Z; /* Zona de segurança */
     if(scanner.i != 0) base->i = scanner.i; /* Ilhas */
