@@ -3,7 +3,7 @@
 /**  IME-USP   -  Primeiro  Semestre  de    2013  **/
 /**  Turma 45  -  Kelly Rosa Bragheto             **/
 /**                                               **/
-/**  Segundo   Exercício-Programa                 **/
+/**  Quarto    Exercício-Programa                 **/
 /**  Arquivo:  test.h                             **/
 /**                                               **/
 /**  Karina Suemi Awoki                  7572102  **/
@@ -11,7 +11,7 @@
 /**  Ruan de Menezes Costa               7990929  **/
 /**                                               **/
 /**  Em caso de eventuais problemas, acesse:      **/
-/**  git@github.com:renatocf/MAC0211-EP2.git      **/
+/**  git@github.com:renatocf/MAC0211-EP4.git      **/
 /***************************************************/ 
 
 #ifndef H_TEST_DEFINED

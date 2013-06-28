@@ -3,7 +3,7 @@
 /**  IME-USP   -  Primeiro  Semestre  de    2013  **/
 /**  Turma 45  -  Kelly Rosa Bragheto             **/
 /**                                               **/
-/**  Segundo   Exercício-Programa                 **/
+/**  Quarto    Exercício-Programa                 **/
 /**  Arquivo:  river-internal.h                   **/
 /**                                               **/
 /**  Karina Suemi Awoki                  7572102  **/
@@ -11,14 +11,17 @@
 /**  Ruan de Menezes Costa               7990929  **/
 /**                                               **/
 /**  Em caso de eventuais problemas, acesse:      **/
-/**  git@github.com:renatocf/MAC0211-EP2.git      **/
+/**  git@github.com:renatocf/MAC0211-EP4.git      **/
 /***************************************************/
 
 #ifndef H_RIVER_INTERNAL_DEFINED
 #define H_RIVER_INTERNAL_DEFINED
 
+/* Biblioteca para o cliente */
 #include "river.h"
+#include "player.h"
 
+/* Estrutura de configurações */
 typedef struct conf Conf;
 struct conf
 {
@@ -30,13 +33,24 @@ struct conf
     int   freq_island;
 };
 
-List river;
-TStrip base;
+/* Variáveis para gerar o rio */
+List river; TStrip base;
+
+/* Jogador e configuração padrão */
 Conf Config;
+Player P1;
+
+/* Posições para o barco */
+int boat_vpos, boat_hpos;
+
+/* Auxiliar para impressão do rio */
+int frame_height;
 
 /* Função auxiliar para imprimir
  * a faixa de terra */
-void save_base   (TStrip);
 void strip_print (TStrip);
+
+TStrip strip1;
+int scale;
 
 #endif

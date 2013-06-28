@@ -3,7 +3,7 @@
 /**  IME-USP   -  Primeiro  Semestre  de    2013  **/
 /**  Turma 45  -  Kelly Rosa Bragheto             **/
 /**                                               **/
-/**  Segundo   Exercício-Programa                 **/
+/**  Quarto    Exercício-Programa                 **/
 /**  Arquivo:  test.c                             **/
 /**                                               **/
 /**  Karina Suemi Awoki                  7572102  **/
@@ -11,7 +11,7 @@
 /**  Ruan de Menezes Costa               7990929  **/
 /**                                               **/
 /**  Em caso de eventuais problemas, acesse:      **/
-/**  git@github.com:renatocf/MAC0211-EP2.git      **/
+/**  git@github.com:renatocf/MAC0211-EP4.git      **/
 /***************************************************/ 
 
 /*
@@ -100,7 +100,7 @@ void analyse_program(int seed, int iterations, int mode, char output[SIZE_NAME])
     /** TESTE 1: OPÇÕES DO JOGADOR ************************************/
         /* Zerando todas nossas variáveis para o teste */
         n_lines = maxr_mean = maxl_mean = 0;
-        
+       
         fprintf(stdout, "\nTeste nº 1: Opções do jogador:\n");
         fprintf(stdout, "Deseja prosseguir com o teste? ");  
         scanf(" "); scanf("%c", &ans);

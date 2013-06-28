@@ -43,7 +43,7 @@
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
 
-static void gui_boat_move (int move);
+static void gui_keyboard (int move);
 
 /* Esquerda, baixo, cima, direita */
 static int mov[4] = {0, 0, 0, 0}; 
@@ -111,38 +111,40 @@ int gui_event_get(void)
         ALLEGRO_EVENT event;
         al_wait_for_event(event_queue, &event);
         
+        /* 1º Caso: fechar a janela */
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
         { 
             al_destroy_event_queue(event_queue);
             gui_window_destroy();
             return CLOSE; 
         }
-        
+        /* 2º Caso: pressionando tecla */
         else if (event.type == ALLEGRO_EVENT_KEY_DOWN)
         {
             switch(event.keyboard.keycode)
             {
                 case ALLEGRO_KEY_LEFT:
-                    gui_boat_move(1);
+                    gui_keyboard(MOVE_LEFT);
                     break;
                 case ALLEGRO_KEY_RIGHT:
-                    gui_boat_move(2);
+                    gui_keyboard(MOVE_RIGHT);
                     break;
             }
         }
+        /* 3º caso: soltando tecla */
         else if (event.type == ALLEGRO_EVENT_KEY_UP)
         {
             switch(event.keyboard.keycode)
             {
                 case ALLEGRO_KEY_LEFT:
-                    gui_boat_move(-1);
+                    gui_keyboard(STOP_LEFT);
                     break;
                 case ALLEGRO_KEY_RIGHT:
-                    gui_boat_move(-2);
+                    gui_keyboard(STOP_RIGHT);
                     break;
             }
         }
-    }
+    } /* while */
     return 0;
 }
 
@@ -153,15 +155,9 @@ void gui_window_destroy()
     window = NULL;
 }
 
-void gui_window_clear()
-{
-    al_clear_to_color(al_map_rgb(0, 0, 0));
-}
-
-void gui_window_update()
-{
-    al_flip_display();
-}
+void gui_window_clear  (void)    { al_clear_to_color(al_map_rgb(0, 0, 0)); }
+void gui_window_update (void)    { al_flip_display(); }
+void gui_window_delay  (float t) { al_rest(t); }
 
 /*
 ////////////////////////////////////////////////////////////////////////
@@ -213,14 +209,7 @@ void gui_river_create_margin(int x1, int y1, int x2, int y2, int x3, int y3)
 -----------------------------------------------------------------------
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
-/*
-static int boat_vpos, boat_hpos;
 
-void gui_boat_start(float x, float y)
-{
-    boat_vpos = x; boat_hpos = y;
-}
-*/
 void gui_boat_draw(int *x, int *y, int prop)
 {
     /* Realiza o movimento */
@@ -255,7 +244,7 @@ void gui_boat_shock(int n)
 -----------------------------------------------------------------------
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
-static void gui_boat_move(int key)
+static void gui_keyboard(int key)
 {
     switch(key)
     {

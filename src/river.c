@@ -22,21 +22,6 @@
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------
-                                JOGADOR
------------------------------------------------------------------------
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-*/
-
-typedef struct player Player;
-struct player {
-    int lifes;
-};
-
-Player P1;
-
-/*
-////////////////////////////////////////////////////////////////////////
------------------------------------------------------------------------
                          FUNÇÕES DE CONFIGURAÇÃO
 -----------------------------------------------------------------------
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -63,14 +48,8 @@ void river_config_margins (int zone)
     Config.zone = zone;
 }
 
-static int frame_height;
-int old_left_margin = -1; int old_right_margin = -1;
-TStrip strip1;
-
-int boat_vpos;
-int boat_hpos;
-
-
+int old_left_margin = -1; 
+int old_right_margin = -1;
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------
@@ -78,6 +57,7 @@ int boat_hpos;
 -----------------------------------------------------------------------
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
+
 void river_animation_init()
 {
     gui_init();
@@ -167,10 +147,14 @@ int river_animation_iterate()
         gui_boat_draw(&boat_hpos, &boat_vpos, 5);
         
         /* Barco bateu, recomeça do meio */
-        if(strip1[boat_hpos].t == LAND 
+/*        if(strip1[boat_hpos].t == LAND 
         || strip1[boat_hpos-1].t == LAND
         || strip1[boat_hpos-2].t == LAND 
-        || strip1[boat_hpos+1].t == LAND)
+        || strip1[boat_hpos+1].t == LAND)*/
+        if(base[boat_hpos].t == LAND 
+        || base[boat_hpos-1].t == LAND
+        /* || base[boat_hpos-2].t == LAND  */
+        || base[boat_hpos+1].t == LAND)
         {
             P1.lifes--; gui_boat_shock(P1.lifes);
             boat_hpos = (int) (Config.length/2.0);
@@ -262,10 +246,9 @@ void strip_print(TStrip strip)
                 gui_river_create_land(i * 5, frame_height);
             else if(strip[i].t == WATER)
                 gui_river_create_water(i * 5, frame_height);
-
         }
         
-        al_rest(1.4e-5);
+        gui_window_delay(1.4e-5);
         old_left_margin = old_m_l;
         old_right_margin = old_m_r;
         

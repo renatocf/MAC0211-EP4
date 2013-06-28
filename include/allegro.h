@@ -18,6 +18,7 @@ void gui_init();
 
 /* Funções de criação de janelas */
 void gui_window_clear   (void);
+void gui_window_delay   (float t);
 void gui_window_update  (void);
 void gui_window_create  (int length, int height);
 void gui_window_destroy (void);

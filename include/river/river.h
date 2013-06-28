@@ -28,8 +28,8 @@ void river_animation_init     (void);
 void river_animation_generate (int);        /* semente */
 int  river_animation_iterate  (void);
 void river_animation_finish   (void);
-void movement(int key);
 
+/* Retorno das iterações: FIM DE JOGO */
 #define GAME_OVER 42
 
 #endif
