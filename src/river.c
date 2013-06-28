@@ -150,7 +150,8 @@ int river_animation_iterate()
         /*printf("%d %d\n", boat_hpos, boat_vpos);*/
         gui_boat_draw(&boat_hpos, &boat_vpos, 5);
         /* Velocidade */
-        speedy = 0.8 * strip1[boat_hpos].v + 0.2 * sin(boat_angle);
+        speedy = 0.6 * strip1[boat_hpos].v + (sqrt(cos(boat_angle)*cos(boat_angle))+1) * speedy*0.4;
+                printf("_________%f                      %f   %f\n ", speedy, strip1[boat_hpos].v, sqrt(cos(boat_angle)*cos(boat_angle)));
 
         /* Barco bateu, recomeça do meio */
         if(strip1[boat_hpos].t == LAND
@@ -172,7 +173,7 @@ int river_animation_iterate()
             /*boat_angle += ( move_right - move_left ) * ALFA + pi / 2;
             boat_speed = strip1[boat_hpos].v + sin(boat_angle)*(strip1[boat_hpos-1].v + strip1[boat_hpos+1].v)/2.0;*/
 
-            boat_angle = (pi/2.0)*(1- (5.0 * move/Config.length));
+            boat_angle = (pi/2.0)*(1- (10.0 * move/Config.length));
         }
 
         gui_window_update();
@@ -261,8 +262,8 @@ void strip_print(TStrip strip)
             else if(strip[i].t == WATER)
                 gui_river_create_water(i * 5, frame_height);
         }
-        gui_window_delay(0.22* pow(10, -(4.0 + speedy)));
-        printf("_________%f\n ", speedy);
+        gui_window_delay(0.22* pow(10, -(3.0 + speedy*2.0)));
+
 
   /*gui_window_delay(0.22e-8);*/
         old_left_margin = old_m_l;

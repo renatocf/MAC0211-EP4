@@ -68,8 +68,6 @@ void gui_init()
 
     if(!gui_keyboard_init())
         fprintf(stderr, "Falha ao inicializar o teclado.\n");
-
-    boat_angle = 90.0;
 }
 
 /*
