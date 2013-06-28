@@ -20,6 +20,7 @@
 #include "river-internal.h"
 
 TStrip strip1;
+/*float boat_angle = 0;*/
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------
@@ -162,6 +163,11 @@ int river_animation_iterate()
             boat_hpos = (int) (Config.length/2.0);
             boat_vpos = frame_height/5;
         }
+        /*else
+        {
+            boat_angle += (number_right-number_left)*ALFA + pi/2;
+            boat_speed = strip1[boat_hpos].v + sin(boat_angle)*(strip1[boat_hpos-1].v + strip1[boat_hpos+1].v)/2.0;
+        }*/
 
         gui_window_update();
 
@@ -250,7 +256,7 @@ void strip_print(TStrip strip)
                 gui_river_create_water(i * 5, frame_height);
         }
 
-        gui_window_delay(1.4e-5);
+        gui_window_delay(0.22e-4);
         old_left_margin = old_m_l;
         old_right_margin = old_m_r;
 
