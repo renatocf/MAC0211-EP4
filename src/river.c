@@ -82,7 +82,7 @@ void river_animation_init()
 {
     gui_init();
     boat_hpos = (int) (Config.length/2.0); 
-    boat_vpos = frame_height;
+    boat_vpos = frame_height/5;
     
     gui_window_create(Config.length * 5, Config.height * 5);
     
@@ -129,8 +129,12 @@ void river_animation_generate(int seed)
         
     /** IMPRIME RIO ***************************************************/
         gui_window_clear();
-        /* gui_boat_start((Config.length/2.0) * 5, frame_height); */
         list_select(river, HEAD, strip_print);
+        
+        boat_hpos = (int) (Config.length/2.0);
+        boat_vpos = frame_height/5;
+        gui_boat_draw(&boat_hpos, &boat_vpos, 5);
+        
         gui_window_update();
 }
 
@@ -159,7 +163,7 @@ int river_animation_iterate()
         gui_window_clear();
         list_select(river, HEAD, strip_print);
         
-        printf("%d %d\n", boat_hpos, frame_height);
+        printf("%d %d\n", boat_hpos, boat_vpos);
         gui_boat_draw(&boat_hpos, &boat_vpos, 5);
         
         /* Barco bateu, recomeça do meio */

@@ -113,16 +113,11 @@ int main(int argc, char **argv)
         func_err = system("ls options.conf; return $?");
         if(!func_err)
         {
-            fprintf(stderr, "ENTROU!\n");
             /* Arquivo de configuração: options.conf
              * Guarda o stream no padrão yyin do scanner */
             yyin = fopen("options.conf", "r");
             
-            fprintf(stderr, "PARSEANDO!\n");
             /* Chama o parser para ler opções */
-            printf("Antes do LEX\n");
-            /* yylex(); */
-            printf("Depois do LEX\n");
             func_err = yyparse(); 
             if(func_err)
             {
@@ -133,7 +128,6 @@ int main(int argc, char **argv)
             /* Atribui opções nos argumentos */
             args = yygetopt(&args);
             
-            fprintf(stderr, "FECHANDO!\n");
             /* Fecha o arquivo configurado para leitura */
             fclose(yyin);
         }
