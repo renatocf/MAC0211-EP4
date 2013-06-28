@@ -46,7 +46,7 @@
 static void gui_keyboard (int move);
 
 /* Esquerda, baixo, cima, direita */
-static int mov[4] = {0, 0, 0, 0}; 
+static int mov[4] = {0, 0, 0, 0};
 
 /*
 ////////////////////////////////////////////////////////////////////////
@@ -61,13 +61,15 @@ void gui_init()
     /* Inicializa a biblioteca allegro */
     al_init();
     al_init_primitives_addon();
-    
+
     /* Cria fila de eventos */
     event_queue = NULL;
     event_queue = al_create_event_queue();
-    
+
     if(!gui_keyboard_init())
         fprintf(stderr, "Falha ao inicializar o teclado.\n");
+
+    boat_angle = 90.0;
 }
 
 /*
@@ -82,13 +84,13 @@ void gui_window_create(int length, int height)
 {
     /* Variável representando a janela principal */
     window = NULL;
-    
+
     /* Criamos a nossa janela - dimensões de largura x altura pixels */
     window = al_create_display(length, height);
 
     /* Preenchemos a janela de branco */
     al_clear_to_color(al_map_rgb(255, 255, 255));
-    
+
     /* Atualiza a tela */
     al_flip_display();
     if (!event_queue)
@@ -96,11 +98,11 @@ void gui_window_create(int length, int height)
         fprintf(stderr, "Falha ao criar fila de eventos.\n");
         gui_window_destroy();
     }
-    
+
     al_set_window_title(window, "Jogo da canoa");
-    
+
     /* Associa teclado com a janela */
-    al_register_event_source(event_queue, 
+    al_register_event_source(event_queue,
         al_get_display_event_source(window));
 }
 
@@ -110,13 +112,13 @@ int gui_event_get(void)
     {
         ALLEGRO_EVENT event;
         al_wait_for_event(event_queue, &event);
-        
+
         /* 1º Caso: fechar a janela */
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-        { 
+        {
             al_destroy_event_queue(event_queue);
             gui_window_destroy();
-            return CLOSE; 
+            return CLOSE;
         }
         /* 2º Caso: pressionando tecla */
         else if (event.type == ALLEGRO_EVENT_KEY_DOWN)
@@ -150,8 +152,8 @@ int gui_event_get(void)
 
 void gui_window_destroy()
 {
-    if(window != NULL) 
-        al_destroy_display(window); 
+    if(window != NULL)
+        al_destroy_display(window);
     window = NULL;
 }
 
@@ -168,10 +170,10 @@ void gui_window_delay  (float t) { al_rest(t); }
 */
 
 int gui_keyboard_init(void)
-{ 
+{
     /* Inicializa teclado */
     if(!al_install_keyboard()) return 0; /* ERRO */
-    
+
     /* Associa teclado à fila de eventos */
     al_register_event_source(event_queue, al_get_keyboard_event_source());
     return 1; /* SUCESSO */
@@ -217,9 +219,11 @@ void gui_boat_draw(int *x, int *y, int prop)
     if(mov[RIGHT]) (*x) += 0.5 * prop;
     if(mov[DOWN])  (*y) -= 0.5 * prop;
     if(mov[UP])    (*y) += 0.5 * prop;
-    
-    al_draw_filled_ellipse((*x * prop), (*y * prop)-20.0, 
+
+    al_draw_filled_ellipse((*x * prop), (*y * prop)-20.0,
             10.0, 20.0, al_map_rgb(139, 87, 66));
+      /* rotate_sprite(xcf, "canoa.xcf",25, 5, 45); */
+
 }
 
 void gui_boat_shock(int n)
@@ -228,11 +232,11 @@ void gui_boat_shock(int n)
     const char title[]   = "Jogo das Canoas";
     const char heading[] = "Atenção:";
     const char text[]    = "Você perdeu uma vida!! ";
-    
+
     /* Cria e exibe diálogo de erro */
     al_show_native_message_box(
         NULL, title, heading, text, NULL, ALLEGRO_MESSAGEBOX_WARN);
-    
+
     /* Reseta movimentos */
     mov[0] = 0; mov[1] = 0; mov[2] = 0; mov[3] = 0;
 }
@@ -255,17 +259,19 @@ static void gui_keyboard(int key)
         /* Inicia os movimentos: */
         case MOVE_LEFT:
             mov[LEFT] = 1;
+            move--;
             break;
-        
+
         case MOVE_RIGHT:
             mov[RIGHT] = 1;
+            move ++;
             break;
-        
+
         /* Interrompe os movimentos: */
         case STOP_LEFT:
             mov[LEFT] = 0;
             break;
-        
+
         case STOP_RIGHT:
             mov[RIGHT] = 0;
             break;

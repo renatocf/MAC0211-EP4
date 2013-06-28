@@ -13,6 +13,11 @@
 ALLEGRO_DISPLAY *window;
 ALLEGRO_EVENT_QUEUE *event_queue;
 
+/* Acumula o número de vezes seguidas que se pressiona uma tecla */
+int move;
+float boat_angle;
+float speedy;
+
 /* Inicialização da GUI */
 void gui_init();
 

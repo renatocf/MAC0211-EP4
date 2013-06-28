@@ -18,6 +18,7 @@
 #include "utils.h"
 #include "strip.h"
 #include "river-internal.h"
+#define pi 3.14159
 
 TStrip strip1;
 /*float boat_angle = 0;*/
@@ -117,6 +118,9 @@ void river_animation_generate(int seed)
         boat_vpos = frame_height/5;
         gui_boat_draw(&boat_hpos, &boat_vpos, 5);
 
+        /* Velocidade */
+        speedy = 0.8 * strip1[boat_hpos].v + 0.2 * sin(boat_angle);
+
         gui_window_update();
 }
 
@@ -160,14 +164,18 @@ int river_animation_iterate()
         {
             P1.lifes--; /*gui_boat_shock(P1.lifes);*/
             printf("Vidas: %d\n", P1.lifes);
+            move = 0;
+            printf("angulo: %f \n", boat_angle);
             boat_hpos = (int) (Config.length/2.0);
             boat_vpos = frame_height/5;
         }
-        /*else
+        else
         {
-            boat_angle += (number_right-number_left)*ALFA + pi/2;
-            boat_speed = strip1[boat_hpos].v + sin(boat_angle)*(strip1[boat_hpos-1].v + strip1[boat_hpos+1].v)/2.0;
-        }*/
+            /*boat_angle += ( move_right - move_left ) * ALFA + pi / 2;
+            boat_speed = strip1[boat_hpos].v + sin(boat_angle)*(strip1[boat_hpos-1].v + strip1[boat_hpos+1].v)/2.0;*/
+
+            boat_angle = (pi/2.0)*(1- (5.0 * move/Config.length));
+        }
 
         gui_window_update();
 
@@ -255,8 +263,8 @@ void strip_print(TStrip strip)
             else if(strip[i].t == WATER)
                 gui_river_create_water(i * 5, frame_height);
         }
-
-        gui_window_delay(0.22e-4);
+        gui_window_delay(0.22* pow(10, -8));
+  /*gui_window_delay(0.22e-8);*/
         old_left_margin = old_m_l;
         old_right_margin = old_m_r;
 
