@@ -8,7 +8,6 @@
 #include <allegro.h>
 #include "river.h"
 
-
 /* Variáveis globais para criação de janelas e eventos */
 ALLEGRO_DISPLAY *window;
 ALLEGRO_EVENT_QUEUE *event_queue;
@@ -38,6 +37,7 @@ void gui_river_land(float x1, float y1, float x2, float y2);
 void gui_river_smooth_water(float x1, float y1, float x2, float y2, float x3, float y3);
 void gui_river_smooth_land(float x1, float y1, float x2, float y2, float x3, float y3);
 void gui_river_heart(int lifes);
+
 
 /* Funções para manipulação do barco */
 void gui_boat_draw   (int *x, int *y, int proportion);
