@@ -30,12 +30,17 @@
   \bigskip
   \bigskip
 
-  O Jogo das Canoas consiste, nessa fase, em gerar um rio com 
+  O Jogo das Canoas consiste, nessa fase final, em gerar um rio com 
   características atribuídas pelo próprio usuário, sendo essas características 
   frequência, probabilidade e tamanho das ilhas e largura, altura e distância
   mínima entre as margens do rio. O rio que será gerado de acordo com as 
-  características atribuídas pelo usuário, é gerado em 
-  interface gráfica com cores e uma canoa que não tem movimentos.
+  características atribuídas pelo usuário, juntamente com a canoa, são gerados 
+  em interface gráfica com cores e movimentos, onde o rio corre com velocidade
+  que varia de acordo com as situações de jogo e a canoa se move com os comandos
+  do jogador. O objetivo principal deste jogo é movimentar a canoa de forma com
+  que esta não bata nas margens do rio ou nas ilhas, caso haja batida, uma vida é
+  retirada do jogador. O usuário possui ao todo 10 vidas, se ele bater sua canoa 
+  10 vezes, o jogo é encerrado.
 
 
 \newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -50,7 +55,7 @@ Para compilar o jogo, entre na pasta onde o seu jogo se localiza e utilize o seg
 
   Para inicializar o jogo, após compilá-lo, digite no próprio terminal:
   
-  \$ \textcolor{CornflowerBlue}{\textit{./bin/ep2}}
+  \$ \textcolor{CornflowerBlue}{\textit{./bin/Canoagem}}
   
   Digitando esse comando, irá aparecer o seguinte:
 
@@ -196,7 +201,7 @@ Para compilar o jogo, entre na pasta onde o seu jogo se localiza e utilize o seg
     
     \$ \textcolor{CornflowerBlue}{\textit{make}}
     
-    \$ \textcolor{CornflowerBlue}{\textit{./bin/ep2 -H30 -L60 -Z20}}
+    \$ \textcolor{CornflowerBlue}{\textit{./bin/Canoagem -H30 -L60 -Z20}}
   
     \bigskip
     
@@ -224,7 +229,7 @@ Para compilar o jogo, entre na pasta onde o seu jogo se localiza e utilize o seg
     
     \$ \textcolor{CornflowerBlue}{\textit{make}}
     
-    \$ \textcolor{CornflowerBlue}{\textit{./bin/ep2 -F20 -H25 -L65 -i0.8 -f2 -s10 -Z35}}
+    \$ \textcolor{CornflowerBlue}{\textit{./bin/Canoagem -F20 -H25 -L65 -i0.8 -f2 -s10 -Z35}}
     
     \bigskip
 
@@ -232,5 +237,26 @@ Para compilar o jogo, entre na pasta onde o seu jogo se localiza e utilize o seg
      \includegraphics[scale=1]{im2.png}
      \caption{Legenda da Imagem}
 \end{figure}
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+\section{\textcolor{NavyBlue}{Como jogar: }}
+  Primeiro use as setas direita e esquerda do teclado para mover a canoa 
+  horizontalmente, sempre tentando desviar das ilhas e das margens para não perder
+  vidas.
+
+\begin{figure}[h]
+     \includegraphics[scale=0.5]{setas.png}
+     \caption{Legenda da Imagem}
+\end{figure}
+
+  As vidas estão representadas por corações no canto superior direito da tela, cada
+  coração representa uma vida. A cada batida, você perderá um coração.
+ 
+\begin{figure}[h]
+     \includegraphics[scale=1]{heart.png}
+     \caption{Legenda da Imagem}
+\end{figure}
+
 
 \end{document}

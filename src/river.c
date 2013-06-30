@@ -155,7 +155,7 @@ int river_animation_iterate()
     gui_boat_draw(&boat_hpos, &boat_vpos, 5);
     /* Velocidade */
     speedy = 0.6 * strip1[boat_hpos].v + (sqrt(cos(boat_angle)*cos(boat_angle))+1) * speedy*0.4;
-    /*printf("_________%f                      %f   %f\n ", speedy, strip1[boat_hpos].v, sqrt(cos(boat_angle)*cos(boat_angle)));*/
+    printf("_________%f                      %f   %f\n ", speedy, strip1[boat_hpos].v, sqrt(cos(boat_angle)*cos(boat_angle)));
 
     /* Barco bateu, recomeça do meio */
     if(strip1[boat_hpos].t == LAND
