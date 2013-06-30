@@ -85,10 +85,12 @@ void gui_window_create(int length, int height)
     /* Variável representando a janela principal */
     window = NULL;
     boat = NULL;
+    heart = NULL;
 
     /* Criamos a nossa janela - dimensões de largura x altura pixels */
     window = al_create_display(length, height);
     boat = al_load_bitmap("b3.png");
+    heart = al_load_bitmap("heart.png");
     boat_height = al_get_bitmap_height(boat);
     boat_width = al_get_bitmap_width(boat);
 
@@ -162,7 +164,13 @@ void gui_window_destroy()
 }
 
 void gui_window_clear  (void)    { al_clear_to_color(al_map_rgb(0, 0, 0)); }
-void gui_window_update (void)    { al_flip_display(); }
+
+void gui_window_update (int lifes)
+{
+    gui_river_heart(lifes);
+    al_flip_display();
+}
+
 void gui_window_delay  (float t) { al_rest(t); }
 
 /*
@@ -212,6 +220,14 @@ void gui_river_smooth_land(float x1, float y1, float x2, float y2, float x3, flo
     al_draw_filled_triangle(x1, y1 ,x2, y2, x3, y3, al_map_rgb(139, 69, 19));
 }
 
+void gui_river_heart(int lifes)
+{
+    extern int frame_length;
+    int i;
+    for(i = lifes; i > 0; i--)
+        al_draw_rotated_bitmap(heart, 0, 0, frame_length-20*i, 0, 0,0);
+}
+
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------
@@ -238,7 +254,7 @@ void gui_boat_draw(int *x, int *y, int prop)
     if(mov[DOWN])  (*y) -= 0.5 * prop;
     if(mov[UP])    (*y) += 0.5 * prop;
 
-    al_draw_rotated_bitmap(boat, boat_width/2, boat_height/2, (*x * prop), (*y * prop)-20.0, rotate*ALLEGRO_PI/8, 0);
+    al_draw_rotated_bitmap(boat, boat_width/2, boat_height/2, (*x * prop), (*y * prop)-30.0, rotate*ALLEGRO_PI/8, 0);
     /*al_draw_bitmap(boat, (*x*prop), (*y*prop)-60, 0);*/
     /*al_draw_filled_ellipse((*x * prop), (*y * prop)-20.0,
             10.0, 20.0, al_map_rgb(139, 87, 66));*/

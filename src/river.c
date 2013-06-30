@@ -122,7 +122,7 @@ void river_animation_generate(int seed)
     gui_boat_draw(&boat_hpos, &boat_vpos, 5);
 
 
-    gui_window_update();
+    gui_window_update(P1.lifes);
 }
 
 int river_animation_iterate()
@@ -181,7 +181,7 @@ int river_animation_iterate()
         boat_angle = (pi/2.0)*(1- (10.0 * move/Config.length));
     }
 
-    gui_window_update();
+    gui_window_update(P1.lifes);
 
     /* Fim de Jogo */
     if(P1.lifes == 0) return GAME_OVER;
