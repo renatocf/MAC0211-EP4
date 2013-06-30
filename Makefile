@@ -12,7 +12,7 @@ BIN := Canoagem
 
 # Flags for compilation and linkage
 CFLAGS  += -ansi -Wall -pedantic -g
-LDFLAGS += -lm -lallegro -lallegro_primitives -lallegro -lallegro_dialog
+LDFLAGS += -lm -lallegro -lallegro_primitives -lallegro -lallegro_dialog -lallegro_image -lallegro
 
 # Boolean options ('true' or 'false')
 B_PROFILE = 'false'

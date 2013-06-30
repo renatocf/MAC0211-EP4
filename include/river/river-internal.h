@@ -45,6 +45,7 @@ int boat_vpos, boat_hpos;
 
 /* Auxiliar para impressão do rio */
 int frame_height;
+int frame_length;
 
 /* Função auxiliar para imprimir
  * a faixa de terra */

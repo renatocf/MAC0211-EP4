@@ -12,6 +12,7 @@
 /* Variáveis globais para criação de janelas e eventos */
 ALLEGRO_DISPLAY *window;
 ALLEGRO_EVENT_QUEUE *event_queue;
+ALLEGRO_BITMAP *boat;
 
 /* Acumula o número de vezes seguidas que se pressiona uma tecla */
 int move;
@@ -29,11 +30,10 @@ void gui_window_create  (int length, int height);
 void gui_window_destroy (void);
 
 /* Funções de manipulação do rio */
-void gui_river_create_land   (float x1, float y1);
-void gui_river_create_water  (float x1, float y1);
-void gui_river_create_margin (int x1, int y1,
-                              int x2, int y2,
-                              int x3, int y3);
+void gui_river_water(float x1, float y1, float x2, float y2);
+void gui_river_land(float x1, float y1, float x2, float y2);
+void gui_river_smooth_water(float x1, float y1, float x2, float y2, float x3, float y3);
+void gui_river_smooth_land(float x1, float y1, float x2, float y2, float x3, float y3);
 
 /* Funções para manipulação do barco */
 void gui_boat_draw   (int *x, int *y, int proportion);

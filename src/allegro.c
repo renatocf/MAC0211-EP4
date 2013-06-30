@@ -13,6 +13,7 @@
 /* Bibliotecas gráficas */
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_image.h>
 
 /* Bibliotecas internas */
 #include "allegro.h"
@@ -61,6 +62,7 @@ void gui_init()
     /* Inicializa a biblioteca allegro */
     al_init();
     al_init_primitives_addon();
+    al_init_image_addon();
 
     /* Cria fila de eventos */
     event_queue = NULL;
@@ -82,9 +84,12 @@ void gui_window_create(int length, int height)
 {
     /* Variável representando a janela principal */
     window = NULL;
+    boat = NULL;
 
     /* Criamos a nossa janela - dimensões de largura x altura pixels */
     window = al_create_display(length, height);
+    boat = al_load_bitmap("/home/ruan/Documentos/labprog/ep4/src/barco.png");
+    printf("%p\n", (void*)boat);
 
     /* Preenchemos a janela de branco */
     al_clear_to_color(al_map_rgb(255, 255, 255));
@@ -185,21 +190,25 @@ int gui_keyboard_init(void)
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
 
-void gui_river_create_land(float x1, float y1)
+
+void gui_river_water(float x1, float y1, float x2, float y2)
 {
-    al_draw_filled_rectangle(x1, y1, x1+5, y1+5, al_map_rgb(139, 69, 19));
+    al_draw_filled_rectangle(x1, y1, x2, y2, al_map_rgb(135, 206, 250));
 }
 
-void gui_river_create_water(float x1, float y1)
+void gui_river_land(float x1, float y1, float x2, float y2)
 {
-    al_draw_filled_rectangle(x1, y1, x1+5, y1+5, al_map_rgb(100, 149, 237));
+    al_draw_filled_rectangle(x1, y1, x2, y2, al_map_rgb(139, 69, 19));
 }
 
-void gui_river_create_margin(int x1, int y1, int x2, int y2, int x3, int y3)
+void gui_river_smooth_water(float x1, float y1, float x2, float y2, float x3, float y3)
 {
-    /* Triângulo preenchido: x1, y1, x2, y2, x3, y3, cor*/
-    al_draw_filled_triangle(x1, y1, x2, y2, x3, y3, al_map_rgb(139, 69, 19));
-    al_draw_filled_triangle(x2, y2, x3, y3, x2, y3, al_map_rgb(100, 149, 237));
+    al_draw_filled_triangle(x1, y1 ,x2, y2, x3, y3, al_map_rgb(135, 206, 250));
+}
+
+void gui_river_smooth_land(float x1, float y1, float x2, float y2, float x3, float y3)
+{
+    al_draw_filled_triangle(x1, y1 ,x2, y2, x3, y3, al_map_rgb(139, 69, 19));
 }
 
 /*
@@ -218,9 +227,10 @@ void gui_boat_draw(int *x, int *y, int prop)
     if(mov[DOWN])  (*y) -= 0.5 * prop;
     if(mov[UP])    (*y) += 0.5 * prop;
 
+    /*al_draw_bitmap(boat, (*x*prop), (*y*prop)-60, 0);*/
     al_draw_filled_ellipse((*x * prop), (*y * prop)-20.0,
             10.0, 20.0, al_map_rgb(139, 87, 66));
-      /* rotate_sprite(xcf, "canoa.xcf",25, 5, 45); */
+      /*rotate_sprite(xcf, "canoa.xcf",25, 5, 45); */
 
 }
 
