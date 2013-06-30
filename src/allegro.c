@@ -238,7 +238,7 @@ void gui_boat_draw(int *x, int *y, int prop)
     if(mov[DOWN])  (*y) -= 0.5 * prop;
     if(mov[UP])    (*y) += 0.5 * prop;
 
-    al_draw_rotated_bitmap(boat, boat_width/2, boat_height/2, (*x * prop), (*y * prop)-20.0, rotate*ALLEGRO_PI/4, 0);
+    al_draw_rotated_bitmap(boat, boat_width/2, boat_height/2, (*x * prop), (*y * prop)-20.0, rotate*ALLEGRO_PI/8, 0);
     /*al_draw_bitmap(boat, (*x*prop), (*y*prop)-60, 0);*/
     /*al_draw_filled_ellipse((*x * prop), (*y * prop)-20.0,
             10.0, 20.0, al_map_rgb(139, 87, 66));*/
