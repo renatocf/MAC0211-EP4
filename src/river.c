@@ -161,8 +161,8 @@ int river_animation_iterate()
     if(strip1[boat_hpos].t == LAND
             || strip1[boat_hpos-1].t == LAND
             || strip1[boat_hpos-2].t == LAND
-            || strip1[boat_hpos+1].t == LAND
-            || strip1[boat_hpos+4].t == LAND)
+            || strip1[boat_hpos+1].t == LAND/*
+            || strip1[boat_hpos+2].t == LAND*/)
         /*if(base[boat_hpos].t == LAND
         || base[boat_hpos-1].t == LAND
         || base[boat_hpos-2].t == LAND
@@ -213,19 +213,19 @@ void strip_print(TStrip strip)
                 new_right_margin = i;
                 break;
             }
-    
+
     /** ENCONTRA ILHA *************************************************/
         for(i = new_left_margin + 1; i < new_right_margin; i++)
         {
             /* Margem direita */
-            if(strip[i].t == WATER && strip[i+1].t == LAND) 
+            if(strip[i].t == WATER && strip[i+1].t == LAND)
                 { island_left_margin = i+1; }
-            
+
             /* Margem esquerda */
             if(strip[i].t == LAND && strip[i+1].t == WATER)
                 { island_right_margin = i; break; }
         }
-    
+
     /** 1º CASO: ÁGUA *************************************************/
         /* 1.1: Não há ilhas - imprime água entre as margens */
         if(island_left_margin == -1 && island_right_margin == -1)
@@ -236,9 +236,9 @@ void strip_print(TStrip strip)
                 new_right_margin*5,         /* x2 */
                 frame_height+5              /* y2 */
             );
-        }                                   
+        }
         /* 1.2: Exitem ilhas - imprime água no entorno da ilhas */
-        else 
+        else
         {
             gui_river_water( /* Esquerda */
                 new_left_margin*5,          /* x1 */
@@ -254,15 +254,15 @@ void strip_print(TStrip strip)
                 frame_height+5              /* y2 */
             );
         }
-    
+
     /** 2º CASO: TERRA ************************************************/
         /* 2.1: Há margens maiores que 1 quadrado */
         if(old_right_margin != -1 && old_left_margin != -1)
         {
-            /* 
-             *  2.1.1: MARGEM ESQUERDA 
+            /*
+             *  2.1.1: MARGEM ESQUERDA
              */
-            
+
             /* 2.1.1.1: Margem esquerda à frente da nova margem */
             if(old_left_margin > new_left_margin)
             {
@@ -273,7 +273,7 @@ void strip_print(TStrip strip)
                     old_left_margin*5,      /* x2 */
                     frame_height+5          /* y2 */
                 );
-                
+
                 /* Triângulo para a terra */
                 gui_river_smooth_land(
                     old_left_margin*5,      /* x1 */
@@ -283,7 +283,7 @@ void strip_print(TStrip strip)
                     (old_left_margin+1)*5,  /* x3 */
                     frame_height            /* y3 */
                 );
-                
+
                 /* Triângulo para a água */
                 gui_river_smooth_water(
                     old_left_margin*5,      /* x1 */
@@ -294,20 +294,20 @@ void strip_print(TStrip strip)
                     frame_height            /* y3 */
                 );
             }
-            
+
             /* 2.1.1.2: Margem esquerda anterior à nova margem */
             else if(old_left_margin < new_left_margin)
             {
                 /* Terra esquerda */
-                gui_river_land(                 
+                gui_river_land(
                     0,                      /* x1 */
                     frame_height,           /* y1 */
                     new_left_margin*5,      /* x2 */
                     frame_height+5          /* y2 */
                 );
-                                                
+
                 /* Triângulo para a terra */
-                gui_river_smooth_land(          
+                gui_river_smooth_land(
                     new_left_margin*5,      /* x1 */
                     frame_height,           /* y1 */
                     new_left_margin*5,      /* x2 */
@@ -315,7 +315,7 @@ void strip_print(TStrip strip)
                     (new_left_margin+1)*5,  /* x3 */
                     frame_height+5          /* y3 */
                 );
-                
+
                 /* Triângulo para a água */
                 gui_river_smooth_water(
                     new_left_margin*5,      /* x1 */
@@ -324,9 +324,9 @@ void strip_print(TStrip strip)
                     frame_height,           /* y2 */
                     (new_left_margin+1)*5,  /* x3 */
                     frame_height+5          /* y3 */
-                );                          
+                );
             }
-            
+
             /* 2.1.1.3: Margem esquerda e nova margem retas */
             else
             {
@@ -337,12 +337,12 @@ void strip_print(TStrip strip)
                     (new_left_margin+1)*5,  /* x2 */
                     frame_height+5          /* y2 */
                 );
-            }                                   
-                       
-            /* 
+            }
+
+            /*
              *  2.1.2: MARGEM DIREITA
              */
-            
+
             /* 2.1.2.1: Margem direita à frente da nova direita */
             if(old_right_margin < new_right_margin)
             {
@@ -353,7 +353,7 @@ void strip_print(TStrip strip)
                     frame_length,           /* x2 */
                     frame_height+5          /* y2 */
                 );
-                
+
                 /* Triângulo para a terra */
                 gui_river_smooth_land(
                     old_right_margin*5,     /* x1 */
@@ -363,7 +363,7 @@ void strip_print(TStrip strip)
                     new_right_margin*5,     /* x3 */
                     frame_height+5          /* y3 */
                 );
-                
+
                 /* Triângulo para a água */
                 gui_river_smooth_water(
                     old_right_margin*5,     /* x1 */
@@ -374,7 +374,7 @@ void strip_print(TStrip strip)
                     frame_height+5          /* y3 */
                 );
             }
-            
+
             /* 2.1.2.2: Margem direita anterios à nova direita */
             else if(old_right_margin > new_right_margin)
             {
@@ -385,7 +385,7 @@ void strip_print(TStrip strip)
                     frame_length,           /* x2 */
                     frame_height+5          /* y2 */
                 );
-                
+
                 /* Triângulo para a terra */
                 gui_river_smooth_land(
                     new_right_margin*5,     /* x1 */
@@ -395,7 +395,7 @@ void strip_print(TStrip strip)
                     old_right_margin*5,     /* x3 */
                     frame_height            /* y3 */
                 );
-                
+
                 /* Triângulo para a água */
                 gui_river_smooth_water(
                     new_right_margin*5,     /* x1 */
@@ -406,7 +406,7 @@ void strip_print(TStrip strip)
                     frame_height            /* y3 */
                 );
             }
-            
+
             /* 2.1.2.3: Margem direita e nova margem retas */
             else
             {
@@ -419,10 +419,10 @@ void strip_print(TStrip strip)
                 );
             }
 
-            /* 
+            /*
              *  2.1.3: ILHAS
              */
-            
+
             if(island_left_margin != -1 && island_right_margin != -1)
                 /* Coloca terra no intervalo das ilhas */
                 gui_river_land(
@@ -432,7 +432,7 @@ void strip_print(TStrip strip)
                     frame_height+5              /* y2 */
                 );
         }
-        
+
         /* 2.2: Margens com apenas 1 quadrado */
         else
         {
@@ -442,7 +442,7 @@ void strip_print(TStrip strip)
                 new_left_margin*5,      /* x2 */
                 frame_height+5          /* y2 */
             );
-            
+
             gui_river_land(
                 new_right_margin*5,     /* x1 */
                 frame_height,           /* y1 */
@@ -450,17 +450,17 @@ void strip_print(TStrip strip)
                 frame_height+5          /* y2 */
             );
         }
-    
+
     /** CONFIGURAÇÕES PARA NOVA ITERAÇÃO ******************************/
         /* Atraso da função para futura exibição do frame */
         gui_window_delay(0.22* pow(10, -(3.0 + speedy*2.0)));
-        
-        /* Salva margens esquerda/direita recém 
+
+        /* Salva margens esquerda/direita recém
          * criadas para a nova iteração da impressão */
         old_left_margin = new_left_margin;
         old_right_margin = new_right_margin;
-        
-        /* Somando à altura atual do frame a constante de 
+
+        /* Somando à altura atual do frame a constante de
          * proporção da exibição do rio */
         frame_height += 5;
 }
