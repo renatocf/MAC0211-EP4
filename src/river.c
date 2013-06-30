@@ -191,99 +191,278 @@ int river_animation_iterate()
 void strip_print(TStrip strip)
 {
     /** VARIÁVEIS *****************************************************/
-    int i;
-    int new_right_margin, new_left_margin;
-    int island_right_margin, island_left_margin;
-    island_right_margin = island_left_margin = -1;
-    strip1 = strip;
+        int i;                        /* Contador auxiliar          */
+        int new_left_margin;          /* Posição nova margem esq.   */
+        int new_right_margin;         /* Posição nova margem dir.   */
+        int island_left_margin = -1;  /* Posição margem esq. ilha   */
+        int island_right_margin = -1; /* Posição margem dir. ilha   */
+        strip1 = strip;
 
-     /** ANÁLISE DO RIO ************************************************/
-    for(i = 0; i < Config.length; i++)
-        if(strip[i].t == LAND && strip[i+1].t == WATER)
-        {
-            new_left_margin = i;
-            break;
-        }
+    /** ENCONTRA MARGEM ESQUERDA **************************************/
+        for(i = 0; i < Config.length; i++)
+            if(strip[i].t == LAND && strip[i+1].t == WATER)
+            {
+                new_left_margin = i;
+                break;
+            }
 
-    for(i = Config.length-1; i > 0; i--)
-        if(strip[i].t == LAND && strip[i-1].t == WATER)
+    /** ENCONTRA MARGEM DIREITA ***************************************/
+        for(i = Config.length-1; i > 0; i--)
+            if(strip[i].t == LAND && strip[i-1].t == WATER)
+            {
+                new_right_margin = i;
+                break;
+            }
+    
+    /** ENCONTRA ILHA *************************************************/
+        for(i = new_left_margin + 1; i < new_right_margin; i++)
         {
-            new_right_margin = i;
-            break;
+            /* Margem direita */
+            if(strip[i].t == WATER && strip[i+1].t == LAND) 
+                { island_left_margin = i+1; }
+            
+            /* Margem esquerda */
+            if(strip[i].t == LAND && strip[i+1].t == WATER)
+                { island_right_margin = i; break; }
         }
+    
+    /** 1º CASO: ÁGUA *************************************************/
+        /* 1.1: Não há ilhas - imprime água entre as margens */
+        if(island_left_margin == -1 && island_right_margin == -1)
+        {
+            gui_river_water(
+                new_left_margin*5,          /* x1 */
+                frame_height,               /* y1 */
+                new_right_margin*5,         /* x2 */
+                frame_height+5              /* y2 */
+            );
+        }                                   
+        /* 1.2: Exitem ilhas - imprime água no entorno da ilhas */
+        else 
+        {
+            gui_river_water( /* Esquerda */
+                new_left_margin*5,          /* x1 */
+                frame_height,               /* y1 */
+                island_left_margin*5,       /* x2 */
+                frame_height+5              /* y2 */
+            );
 
-    for(i = new_left_margin+1; i< new_right_margin; i++)
-    {
-        if(strip[i].t == WATER && strip[i+1].t == LAND) island_left_margin = i+1;
-        if(strip[i].t == LAND && strip[i+1].t == WATER)
-        {
-            island_right_margin = i;
-            break;
+            gui_river_water( /* Direita */
+                (island_right_margin+1)*5,  /* x1 */
+                frame_height,               /* y1 */
+                new_right_margin*5,         /* x2 */
+                frame_height+5              /* y2 */
+            );
         }
-    }
+    
+    /** 2º CASO: TERRA ************************************************/
+        /* 2.1: Há margens maiores que 1 quadrado */
+        if(old_right_margin != -1 && old_left_margin != -1)
+        {
+            /* 
+             *  2.1.1: MARGEM ESQUERDA 
+             */
+            
+            /* 2.1.1.1: Margem esquerda à frente da nova margem */
+            if(old_left_margin > new_left_margin)
+            {
+                /* Terra esquerda */
+                gui_river_land(
+                    0,                      /* x1 */
+                    frame_height,           /* y1 */
+                    old_left_margin*5,      /* x2 */
+                    frame_height+5          /* y2 */
+                );
+                
+                /* Triângulo para a terra */
+                gui_river_smooth_land(
+                    old_left_margin*5,      /* x1 */
+                    frame_height,           /* y1 */
+                    old_left_margin*5,      /* x2 */
+                    frame_height+5,         /* y2 */
+                    (old_left_margin+1)*5,  /* x3 */
+                    frame_height            /* y3 */
+                );
+                
+                /* Triângulo para a água */
+                gui_river_smooth_water(
+                    old_left_margin*5,      /* x1 */
+                    frame_height+5,         /* y1 */
+                    (old_left_margin+1)*5,  /* x2 */
+                    frame_height+5,         /* y2 */
+                    (old_left_margin+1)*5,  /* x3 */
+                    frame_height            /* y3 */
+                );
+            }
+            
+            /* 2.1.1.2: Margem esquerda anterior à nova margem */
+            else if(old_left_margin < new_left_margin)
+            {
+                /* Terra esquerda */
+                gui_river_land(                 
+                    0,                      /* x1 */
+                    frame_height,           /* y1 */
+                    new_left_margin*5,      /* x2 */
+                    frame_height+5          /* y2 */
+                );
+                                                
+                /* Triângulo para a terra */
+                gui_river_smooth_land(          
+                    new_left_margin*5,      /* x1 */
+                    frame_height,           /* y1 */
+                    new_left_margin*5,      /* x2 */
+                    frame_height+5,         /* y2 */
+                    (new_left_margin+1)*5,  /* x3 */
+                    frame_height+5          /* y3 */
+                );
+                
+                /* Triângulo para a água */
+                gui_river_smooth_water(
+                    new_left_margin*5,      /* x1 */
+                    frame_height,           /* y1 */
+                    (new_left_margin+1)*5,  /* x2 */
+                    frame_height,           /* y2 */
+                    (new_left_margin+1)*5,  /* x3 */
+                    frame_height+5          /* y3 */
+                );                          
+            }
+            
+            /* 2.1.1.3: Margem esquerda e nova margem retas */
+            else
+            {
+                /* Terra esquerda */
+                gui_river_land(
+                    0,                      /* x1 */
+                    frame_height,           /* y1 */
+                    (new_left_margin+1)*5,  /* x2 */
+                    frame_height+5          /* y2 */
+                );
+            }                                   
+                       
+            /* 
+             *  2.1.2: MARGEM DIREITA
+             */
+            
+            /* 2.1.2.1: Margem direita à frente da nova direita */
+            if(old_right_margin < new_right_margin)
+            {
+                /* Terra direita */
+                gui_river_land(
+                    new_right_margin*5,     /* x1 */
+                    frame_height,           /* y1 */
+                    frame_length,           /* x2 */
+                    frame_height+5          /* y2 */
+                );
+                
+                /* Triângulo para a terra */
+                gui_river_smooth_land(
+                    old_right_margin*5,     /* x1 */
+                    frame_height,           /* y1 */
+                    new_right_margin*5,     /* x2 */
+                    frame_height,           /* y2 */
+                    new_right_margin*5,     /* x3 */
+                    frame_height+5          /* y3 */
+                );
+                
+                /* Triângulo para a água */
+                gui_river_smooth_water(
+                    old_right_margin*5,     /* x1 */
+                    frame_height,           /* y1 */
+                    old_right_margin*5,     /* x2 */
+                    frame_height+5,         /* y2 */
+                    new_right_margin*5,     /* x3 */
+                    frame_height+5          /* y3 */
+                );
+            }
+            
+            /* 2.1.2.2: Margem direita anterios à nova direita */
+            else if(old_right_margin > new_right_margin)
+            {
+                /* Terra direita */
+                gui_river_land(
+                    old_right_margin*5,     /* x1 */
+                    frame_height,           /* y1 */
+                    frame_length,           /* x2 */
+                    frame_height+5          /* y2 */
+                );
+                
+                /* Triângulo para a terra */
+                gui_river_smooth_land(
+                    new_right_margin*5,     /* x1 */
+                    frame_height+5,         /* y1 */
+                    old_right_margin*5,     /* x2 */
+                    frame_height+5,         /* y2 */
+                    old_right_margin*5,     /* x3 */
+                    frame_height            /* y3 */
+                );
+                
+                /* Triângulo para a água */
+                gui_river_smooth_water(
+                    new_right_margin*5,     /* x1 */
+                    frame_height,           /* y1 */
+                    new_right_margin*5,     /* x2 */
+                    frame_height+5,         /* y2 */
+                    old_right_margin*5,     /* x3 */
+                    frame_height            /* y3 */
+                );
+            }
+            
+            /* 2.1.2.3: Margem direita e nova margem retas */
+            else
+            {
+                /* Terra direita */
+                gui_river_land(
+                    new_right_margin*5,     /* x1 */
+                    frame_height,           /* y1 */
+                    frame_length,           /* x2 */
+                    frame_height+5          /* y2 */
+                );
+            }
 
-    if(island_left_margin == -1 && island_right_margin == -1)
-    {
-        gui_river_water(new_left_margin*5, frame_height, new_right_margin*5, frame_height+5);
-    }
-    else
-    {
-        gui_river_water(new_left_margin*5, frame_height, island_left_margin*5, frame_height+5);
-        gui_river_water((island_right_margin+1)*5, frame_height, new_right_margin*5, frame_height+5);
-    }
-
-    if(old_right_margin != -1 && old_left_margin != -1)
-    {
-        if(old_left_margin > new_left_margin)
-        {
-            gui_river_land(0, frame_height, old_left_margin*5, frame_height+5);
-            gui_river_smooth_land(old_left_margin*5, frame_height, old_left_margin*5, frame_height+5, (old_left_margin+1)*5, frame_height);
-            gui_river_smooth_water(old_left_margin*5, frame_height+5, (old_left_margin+1)*5, frame_height+5, (old_left_margin+1)*5, frame_height);
+            /* 
+             *  2.1.3: ILHAS
+             */
+            
+            if(island_left_margin != -1 && island_right_margin != -1)
+                /* Coloca terra no intervalo das ilhas */
+                gui_river_land(
+                    island_left_margin*5,       /* x1 */
+                    frame_height,               /* y1 */
+                    (island_right_margin+1)*5,  /* x2 */
+                    frame_height+5              /* y2 */
+                );
         }
-        else if(old_left_margin < new_left_margin)
-        {
-            gui_river_land(0, frame_height, new_left_margin*5, frame_height+5);
-            gui_river_smooth_land(new_left_margin*5, frame_height, new_left_margin*5, frame_height+5, (new_left_margin+1)*5, frame_height+5);
-            gui_river_smooth_water(new_left_margin*5, frame_height, (new_left_margin+1)*5, frame_height, (new_left_margin+1)*5, frame_height+5);
-        }
+        
+        /* 2.2: Margens com apenas 1 quadrado */
         else
         {
-            gui_river_land(0, frame_height, (new_left_margin+1)*5, frame_height+5);
+            gui_river_land(
+                0,                      /* x1 */
+                frame_height,           /* y1 */
+                new_left_margin*5,      /* x2 */
+                frame_height+5          /* y2 */
+            );
+            
+            gui_river_land(
+                new_right_margin*5,     /* x1 */
+                frame_height,           /* y1 */
+                frame_length,           /* x2 */
+                frame_height+5          /* y2 */
+            );
         }
-
-        if(old_right_margin < new_right_margin)
-        {
-            gui_river_land(new_right_margin*5, frame_height, frame_length, frame_height+5);
-            gui_river_smooth_land(old_right_margin*5, frame_height, new_right_margin*5, frame_height, new_right_margin*5, frame_height+5);
-            gui_river_smooth_water(old_right_margin*5, frame_height, old_right_margin*5, frame_height+5, new_right_margin*5, frame_height+5);
-        }
-        else if(old_right_margin > new_right_margin)
-        {
-            gui_river_land(old_right_margin*5, frame_height, frame_length, frame_height+5);
-            gui_river_smooth_land(new_right_margin*5, frame_height+5, old_right_margin*5, frame_height+5, old_right_margin*5, frame_height);
-            gui_river_smooth_water(new_right_margin*5, frame_height, new_right_margin*5, frame_height+5, old_right_margin*5, frame_height);
-        }
-        else
-        {
-            gui_river_land(new_right_margin*5, frame_height, frame_length, frame_height+5);
-        }
-
-        if(island_left_margin != -1 && island_right_margin != -1)
-            gui_river_land(island_left_margin*5, frame_height, (island_right_margin+1)*5, frame_height+5);
-
-    }
-    else
-    {
-        gui_river_land(0, frame_height, new_left_margin*5, frame_height+5);
-        gui_river_land(new_right_margin*5, frame_height, frame_length, frame_height+5);
-    }
-
-    gui_window_delay(0.22* pow(10, -(3.0 + speedy*2.0)));
-
-    old_left_margin = new_left_margin;
-    old_right_margin = new_right_margin;
-
-    frame_height += 5;
+    
+    /** CONFIGURAÇÕES PARA NOVA ITERAÇÃO ******************************/
+        /* Atraso da função para futura exibição do frame */
+        gui_window_delay(0.22* pow(10, -(3.0 + speedy*2.0)));
+        
+        /* Salva margens esquerda/direita recém 
+         * criadas para a nova iteração da impressão */
+        old_left_margin = new_left_margin;
+        old_right_margin = new_right_margin;
+        
+        /* Somando à altura atual do frame a constante de 
+         * proporção da exibição do rio */
+        frame_height += 5;
 }
 
 void river_animation_finish()
