@@ -88,8 +88,9 @@ void gui_window_create(int length, int height)
 
     /* Criamos a nossa janela - dimensões de largura x altura pixels */
     window = al_create_display(length, height);
-    boat = al_load_bitmap("/home/ruan/Documentos/labprog/ep4/src/barco.png");
-    printf("%p\n", (void*)boat);
+    boat = al_load_bitmap("b3.png");
+    boat_height = al_get_bitmap_height(boat);
+    boat_width = al_get_bitmap_width(boat);
 
     /* Preenchemos a janela de branco */
     al_clear_to_color(al_map_rgb(255, 255, 255));
@@ -222,14 +223,25 @@ void gui_river_smooth_land(float x1, float y1, float x2, float y2, float x3, flo
 void gui_boat_draw(int *x, int *y, int prop)
 {
     /* Realiza o movimento */
-    if(mov[LEFT])  (*x) -= 0.5 * prop;
-    if(mov[RIGHT]) (*x) += 0.5 * prop;
+    int rotate;
+    if(mov[LEFT])
+    {
+       (*x) -= 0.5 * prop;
+       rotate = -1;
+    }
+    else if(mov[RIGHT])
+    {
+        (*x) += 0.5 * prop;
+        rotate = 1;
+    }
+    else rotate = 0;
     if(mov[DOWN])  (*y) -= 0.5 * prop;
     if(mov[UP])    (*y) += 0.5 * prop;
 
+    al_draw_rotated_bitmap(boat, boat_width/2, boat_height/2, (*x * prop), (*y * prop)-20.0, rotate*ALLEGRO_PI/4, 0);
     /*al_draw_bitmap(boat, (*x*prop), (*y*prop)-60, 0);*/
-    al_draw_filled_ellipse((*x * prop), (*y * prop)-20.0,
-            10.0, 20.0, al_map_rgb(139, 87, 66));
+    /*al_draw_filled_ellipse((*x * prop), (*y * prop)-20.0,
+            10.0, 20.0, al_map_rgb(139, 87, 66));*/
       /*rotate_sprite(xcf, "canoa.xcf",25, 5, 45); */
 
 }

@@ -18,6 +18,8 @@ ALLEGRO_BITMAP *boat;
 int move;
 float boat_angle;
 float speedy;
+float boat_height;
+float boat_width;
 
 /* Inicialização da GUI */
 void gui_init();

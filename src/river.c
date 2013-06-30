@@ -161,7 +161,8 @@ int river_animation_iterate()
     if(strip1[boat_hpos].t == LAND
             || strip1[boat_hpos-1].t == LAND
             || strip1[boat_hpos-2].t == LAND
-            || strip1[boat_hpos+1].t == LAND)
+            || strip1[boat_hpos+1].t == LAND
+            || strip1[boat_hpos+4].t == LAND)
         /*if(base[boat_hpos].t == LAND
         || base[boat_hpos-1].t == LAND
         || base[boat_hpos-2].t == LAND
