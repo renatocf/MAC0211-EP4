@@ -41,8 +41,6 @@ void gui_river_heart(int lifes);
 
 /* Funções para manipulação do barco */
 void gui_boat_draw   (int *x, int *y, int proportion);
-void gui_boat_start  (float x, float y);
-void gui_boat_shock  (int n);
 
 /* Funções para o teclado */
 int  gui_keyboard_init (void);

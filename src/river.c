@@ -151,33 +151,23 @@ int river_animation_iterate()
     gui_window_clear();
     list_select(river, HEAD, strip_print);
 
-    /*printf("%d %d\n", boat_hpos, boat_vpos);*/
     gui_boat_draw(&boat_hpos, &boat_vpos, 5);
     /* Velocidade */
     speedy = 0.6 * strip1[boat_hpos].v + (sqrt(cos(boat_angle)*cos(boat_angle))+1) * speedy*0.4;
-    printf("_________%f                      %f   %f\n ", speedy, strip1[boat_hpos].v, sqrt(cos(boat_angle)*cos(boat_angle)));
 
     /* Barco bateu, recomeça do meio */
     if(strip1[boat_hpos].t == LAND
             || strip1[boat_hpos-1].t == LAND
             || strip1[boat_hpos-2].t == LAND
-            || strip1[boat_hpos+1].t == LAND/*
-            || strip1[boat_hpos+2].t == LAND*/)
-        /*if(base[boat_hpos].t == LAND
-        || base[boat_hpos-1].t == LAND
-        || base[boat_hpos-2].t == LAND
-        || base[boat_hpos+1].t == LAND)*/
+            || strip1[boat_hpos+1].t == LAND)
     {
-        P1.lifes--; /*gui_boat_shock(P1.lifes);*/
+        P1.lifes--;
         move = 0;
         boat_hpos = (int) (Config.length/2.0);
         boat_vpos = frame_height/5;
     }
     else
     {
-        /*boat_angle += ( move_right - move_left ) * ALFA + pi / 2;
-        boat_speed = strip1[boat_hpos].v + sin(boat_angle)*(strip1[boat_hpos-1].v + strip1[boat_hpos+1].v)/2.0;*/
-
         boat_angle = (pi/2.0)*(1- (10.0 * move/Config.length));
     }
 

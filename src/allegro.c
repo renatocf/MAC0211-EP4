@@ -262,21 +262,6 @@ void gui_boat_draw(int *x, int *y, int prop)
 
 }
 
-void gui_boat_shock(int n)
-{
-    /* Mensagens da batida */
-    const char title[]   = "Jogo das Canoas";
-    const char heading[] = "Atenção:";
-    const char text[]    = "Você perdeu uma vida!! ";
-
-    /* Cria e exibe diálogo de erro */
-    al_show_native_message_box(
-        NULL, title, heading, text, NULL, ALLEGRO_MESSAGEBOX_WARN);
-
-    /* Reseta movimentos */
-    mov[0] = 0; mov[1] = 0; mov[2] = 0; mov[3] = 0;
-}
-
 /*
 ////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------

@@ -49,12 +49,13 @@
 \begin{verbatim}
 
 allegro.h . . . . . . . . . . . pág. 03
-getopt.h  . . . . . . . . . . . pág. 03
+getopt.h. . . . . . . . . . . . pág. 03
+player.h. . . . . . . . . . . . pág. 03
 statistical.h . . . . . . . . . pág. 03
 strip.h . . . . . . . . . . . . pág. 03
 terrain.h . . . . . . . . . . . pág. 03
 test.h. . . . . . . . . . . . . pág. 03
-utils.h . . . . . . . . . . . . pág. 03
+utils.h . . . . . . . . . . . . pág. 04
 
 \end{verbatim}
 
@@ -97,8 +98,8 @@ utils.c . . . . . . . . . . . . pág. 08
 \bigskip
 
 Cria as funções que são responsáveis pela imagem gerada em interface gráfica como as que
-desenham quadrados de água, de terra e a elipse que representa o barco. Além de chamar a
-biblioteca allegro e abrir e fechar a janela. 
+desenham retângulos e triângulos de água e de terra manipula a imagem que representa a canoa. Além de chamar a
+biblioteca allegro, abrir e fechar a janela e criar os eventos do teclado. 
 \bigskip
 \bigskip
 \bigskip
@@ -109,6 +110,14 @@ biblioteca allegro e abrir e fechar a janela.
 Cria a função {\textcolor{CornflowerBlue}{char getopt(int argc, char **argv, char *optstring);}}
 que controla o menu de opções. Através dele, recebemos as opções que o usuário entra como parâmetro e 
 e a utilizamos. Também cria variáveis auxiliares à respectiva função.
+\bigskip
+\bigskip
+\bigskip
+
+{\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  player.h}}
+\bigskip
+
+Controla a quantidade de vidas do jogador.
 \bigskip
 \bigskip
 \bigskip
@@ -130,10 +139,9 @@ Cria as funções estatísticas
 
 Responsável pelas funções que manipulam as faixas de terra do terreno com as funções
 {\textcolor{CornflowerBlue}{void   tstrip\_seed(int);}}, 
-{\textcolor{CornflowerBlue}{void   tstrip\_free(TStrip);}}, 
-{\textcolor{CornflowerBlue}{void   tstrip\_print(TStrip);}}, 
+{\textcolor{CornflowerBlue}{void   tstrip\_free(TStrip);}},  
 {\textcolor{CornflowerBlue}{void   tstrip\_island(float prob, int freq);}} e 
-{\textcolor{CornflowerBlue}{TStrip tstrip\_generate(int size, int zone, float normalization, TStrip base);}} que estão localizadas no módulo 
+{\textcolor{CornflowerBlue}{TStrip tstrip\_generate(int size, int zone, float normalization, TStrip base, TStrip nova);}} que estão localizadas no módulo 
 {\textcolor{CornflowerBlue}{strip.c}}.
 \bigskip
 \bigskip
@@ -153,17 +161,16 @@ Responsável pelas funções que controlam a configuração do terreno como a ve
 É responsável pelas funções que realizam os testes com velocidades, margens e fluxos de acordo com o número de frames/iterações que o usuário escolher.
 Serão passados os valores de acordo com o n-ésimo frame.
 
-\bigskip
-\bigskip
-\bigskip
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 {\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  utils.h}}
 \bigskip
 
 Responsável pela função de alocação de memória de uma forma que o programa será finalizado caso haja erro de alocação.
-
-
-\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\bigskip
+\bigskip
 
 {\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  LIST  list.h}}
 \bigskip
@@ -200,7 +207,8 @@ Controla as funções que irão manipular a configuração do rio.
 {\Large \textcolor{NavyBlue}{ \textbf{Bibliotecas  }}}{\large \textcolor{CornflowerBlue}{  RIVER  river-internal.h}}
 \bigskip
 
-É responsável pela struct de configuração do rio, controlando o fluxo, altura, largura, zona, probabilidade e frequência.
+É responsável pela struct de configuração do rio, controlando o fluxo, altura, largura, zona, probabilidade, frequência e impressão
+da faixa de terra.
 
 
 \newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -208,32 +216,48 @@ Controla as funções que irão manipular a configuração do rio.
 {\Large \textcolor{NavyBlue}{ \textbf{Arquivos .c  }}}{\large \textcolor{CornflowerBlue}{  allegro.c}}
 \bigskip
 
-Manipula as funções que são responsáveis pela imagem gerada na tela e pela criação e finalização da janela através
+Manipula as funções que são responsáveis pela imagem gerada na tela e pela criação e finalização da janela e de eventos através
 das funções:
 
-{\textcolor{CornflowerBlue}{void gui\_init(void)}} Inicializa a biblioteca allegro. 
+{\textcolor{CornflowerBlue}{void gui\_init(void)}} Inicializa a biblioteca allegro e atribui null a fila de eventos. 
 
 {\textcolor{CornflowerBlue}{void gui\_window\_clear(void)}} Pinta a janela inteira com a cor preta (0, 0, 0).  
 
-{\textcolor{CornflowerBlue}{void gui\_window\_update(void)}} Carrega a janela, atualiza as configurações que foram feitas.
+{\textcolor{CornflowerBlue}{void gui\_window\_delay(float t)}} Segura a execução por t segundos.
+
+{\textcolor{CornflowerBlue}{void gui\_window\_update(void)}} Carrega a janela, atualiza as configurações que 
+foram feitas e chama a função que desenha os corações na tela conforme o número de vidas restantes do usuário. 
  
 {\textcolor{CornflowerBlue}{void gui\_window\_create(int length, int height)}} Cria uma janela de altura height e altura length. 
 
 {\textcolor{CornflowerBlue}{int gui\_window\_destroy(void)}} Fecha a janela e finaliza o programa quando o usuário clica em 'X'.
 
-{\textcolor{CornflowerBlue}{void gui\_river\_create\_land(float x1, float y1)}} Desenha quadrados na cor da terra nas 
-coordenas (x1, y1).
 
-{\textcolor{CornflowerBlue}{void gui\_river\_create\_water(float x1, float y1)}} Desenha quadrados na cor da água nas
-coordenadas (x1, y1). 
 
-{\textcolor{CornflowerBlue}{void gui\_river\_create\_margin(int x1, int y1, int x2, int y2, int x3, int y3)}} Desenha triangulos 
-nas cores de terra e água, formando a margem. Essa função faz triangulos com vértices de coordenas (x1, y1), (x2, y2) e (x3, y3) 
-em cor de terra, e como esses triangulos sempre serão metade de quadrados, desenhamos na outra metade do mesmo quadrado,
- outro triangulo com cor de água.
 
-{\textcolor{CornflowerBlue}{void gui\_boat\_create(float x, float y)}} Desenha uma canoa em forma de elipse, com centro em (x, y).
+{\textcolor{CornflowerBlue}{void gui\_river\_water(float x1, float y1, float x2, float y2)}} Desenha retangulos na cor da água nas 
+coordenas (x1, y1, x2, y2).
 
+{\textcolor{CornflowerBlue}{void gui\_river\_land(float x1, float y1)}} Desenha retangulos na cor de terra nas
+coordenadas (x1, y1, x2, y2). 
+
+{\textcolor{CornflowerBlue}{void gui\_river\_smooth\_water(float x1, float y1, float x2, float y2, float x3, float y3)}} Desenha triangulos na cor de água que são resultado da margem polarizada.
+
+{\textcolor{CornflowerBlue}{void gui\_river\_smooth\_land(float x1, float y1, float x2, float y2, float x3, float y3)}} Desenha triangulos na cor de terra que são resultado da margem polarizada.
+
+{\textcolor{CornflowerBlue}{void gui\_river\_heart(int lifes)}} Desenha n corações no canto superior direito 
+da tela, sendo n o número de vidas restantes do usuário.
+
+
+{\textcolor{CornflowerBlue}{void gui\_boat\_draw(int *x, int *y, int proportion)}} Imprime a imagem do barco 
+na tela e ajusta o seu angulo de acordo com o seu movimento (se ele foi virado para a esquerda, será inclinado 
+para a esquerda) e de acordo com a posição em que o usuário atribuiu a ele durante o jogo.
+
+{\textcolor{CornflowerBlue}{int gui\_keyboard\_init(void)} Inicializa teclado e o associa a uma fila de eventos.}
+
+{\textcolor{CornflowerBlue}{int gui\_event\_get(void)}} Recebe os eventos que estão na fila de eventos para poder
+manipular o jogo. Como por exemplo os eventos fecha janela, pressionar a tecla "seta" que controlará os movimentos 
+da canoa e soltar a tecla que fará com que o jogador possa segurar uma tecla e a canoa ande até a tecla ser soltada.
 
 \bigskip
 \bigskip
@@ -305,6 +329,8 @@ Esse módulo irá controlar as características do rio, como o fluxo, a velocida
 que contêm informações de ser água ou terra e velocidade. Sendo h a altura do rio atribuída pelo usuário.
 
 {\textcolor{CornflowerBlue}{void river\_animation\_iterate()}} é responsável pela imagem que o usuário verá na tela, pois pegará o valor da altura e juntamente com a função {\textcolor{CornflowerBlue}{void river\_animation\_generate(int seed)}}, gerará um frame do rio, juntando as h faixas de terreno do repectivo frame.
+
+{\textcolor{CornflowerBlue}{void river\_animation\_init()}} Inicializa o rio, atribuindo padrões como vida = 10 e canoa centralizada e criação da janela.
 
 {\textcolor{CornflowerBlue}{void strip\_print(TStrip strip)}} irá imprimir uma determinada linha do rio em interface gráfica 
 chamando as funções de allegro.h. Nessa função será verificado se determinado pixel é terra, água ou margem para assim poder
